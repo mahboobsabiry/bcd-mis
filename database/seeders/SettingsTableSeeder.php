@@ -18,12 +18,8 @@ class SettingsTableSeeder extends Seeder
 
         $settings = [
             [
-                'key'	=> 'mainTitle',
-                'value'	=> 'Pharmacy MIS',
-            ],
-            [
-                'key'	=> 'aboutText',
-                'value'	=> 'This is a text about pharmacy MIS',
+                'key'	    => 'title',
+                'value'	=> 'ریاست گمرک بلخ'
             ]
         ];
 
