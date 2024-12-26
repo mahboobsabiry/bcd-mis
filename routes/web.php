@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AdminController;
 // Asycuda Controllers
-use App\Http\Controllers\Admin\Asycuda\AsycudaController;
 use App\Http\Controllers\Admin\Asycuda\AsycudaUserController;
 use App\Http\Controllers\Admin\Asycuda\COALController;
 // Office Controllers
@@ -14,7 +13,6 @@ use App\Http\Controllers\Admin\Office\BudgetController;
 use App\Http\Controllers\Admin\Office\CompanyController;
 use App\Http\Controllers\Admin\Office\EmployeeHelperController;
 use App\Http\Controllers\Admin\Office\EmployeeController;
-use App\Http\Controllers\Admin\Office\OfficeController;
 use App\Http\Controllers\Admin\Office\ResumeController;
 use App\Http\Controllers\Admin\Office\HostelController;
 use App\Http\Controllers\Admin\Office\LeaveController;
@@ -26,6 +24,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Warehouse\AssuranceController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -40,9 +39,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('admin.dashboard');
-})->name('index');
+Route::group(['as' => 'website.'], function () {
+    // Index
+    Route::get('/', [WebsiteController::class, 'index'])->name('index');
+});
 
 Route::get('/optimize', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize');

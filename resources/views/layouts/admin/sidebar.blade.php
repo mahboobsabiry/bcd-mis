@@ -1,6 +1,6 @@
 <div class="main-sidebar main-sidebar-sticky side-menu">
     <div class="sidemenu-logo">
-        <a class="main-logo" href="{{ route('index') }}" target="_blank">
+        <a class="main-logo" href="{{ route('website.index') }}" target="_blank">
             <span class="text-capitalize">BCD-MIS</span>
             <img src="{{ asset('assets/images/logo.jpg') }}" class="header-brand-img desktop-logo" alt="logo">
             <img src="{{ asset('assets/images/logo.jpg') }}" class="header-brand-img icon-logo" alt="logo">

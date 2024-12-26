@@ -7,7 +7,7 @@
             <div>
                 <h2 class="main-content-title tx-24 mg-b-5">@lang('admin.dashboard.welcomeToBCHS')!</h2>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('index') }}" target="_blank">@lang('global.home')</a>
+                    <li class="breadcrumb-item"><a href="{{ route('website.index') }}" target="_blank">@lang('global.home')</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('admin.dashboard.dashboard')</li>
                 </ol>
