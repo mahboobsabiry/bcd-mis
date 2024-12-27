@@ -17,7 +17,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 1,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -25,7 +25,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 1,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -33,7 +33,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 2,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -41,7 +41,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 2,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -49,7 +49,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 3,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -57,7 +57,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 3,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -65,7 +65,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 4,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -73,7 +73,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 4,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -81,7 +81,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 5,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -89,7 +89,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 5,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -97,7 +97,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 6,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -105,7 +105,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 6,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -113,7 +113,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 7,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -121,7 +121,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 7,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -129,7 +129,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 8,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -137,7 +137,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 8,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -145,7 +145,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 9,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -153,7 +153,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 9,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -161,7 +161,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 10,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -169,7 +169,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 10,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -177,7 +177,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 11,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -185,7 +185,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 11,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -193,7 +193,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 12,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -201,7 +201,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 12,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -209,7 +209,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 13,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -217,7 +217,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 13,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -225,7 +225,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 14,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -233,7 +233,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 14,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -241,7 +241,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 15,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -249,7 +249,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 15,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -257,7 +257,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 16,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -265,7 +265,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 16,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -273,7 +273,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 17,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -281,7 +281,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 17,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -289,7 +289,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 18,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -297,7 +297,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 18,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -305,7 +305,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 19,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -313,7 +313,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 19,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -321,7 +321,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 20,
                 'section'   => 'A',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -329,7 +329,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 20,
                 'section'   => 'B',
-                'place'     => 'محصولی',
+                'place_id'  => 1,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -337,7 +337,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 1,
                 'section'   => null,
-                'place'     => 'سرحدی',
+                'place_id'  => 2,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -345,7 +345,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 2,
                 'section'   => null,
-                'place'     => 'سرحدی',
+                'place_id'  => 2,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => 'نظامیان'
@@ -353,7 +353,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 3,
                 'section'   => null,
-                'place'     => 'سرحدی',
+                'place_id'  => 2,
                 'capacity'  => 5,
                 'status'    => 1,
                 'info'      => null
@@ -361,7 +361,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 4,
                 'section'   => null,
-                'place'     => 'سرحدی',
+                'place_id'  => 2,
                 'capacity'  => 0,
                 'status'    => 1,
                 'info'      => 'مهمان خانه'
@@ -369,7 +369,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 5,
                 'section'   => null,
-                'place'     => 'سرحدی',
+                'place_id'  => 2,
                 'capacity'  => 4,
                 'status'    => 1,
                 'info'      => null
@@ -377,7 +377,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 6,
                 'section'   => null,
-                'place'     => 'سرحدی',
+                'place_id'  => 2,
                 'capacity'  => 8,
                 'status'    => 1,
                 'info'      => 'کانکس'
@@ -385,7 +385,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 1,
                 'section'   => null,
-                'place'     => 'پورت یکم',
+                'place_id'  => 6,
                 'capacity'  => 4,
                 'status'    => 1,
                 'info'      => null
@@ -393,7 +393,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 2,
                 'section'   => null,
-                'place'     => 'پورت یکم',
+                'place_id'  => 6,
                 'capacity'  => 4,
                 'status'    => 1,
                 'info'      => null
@@ -401,7 +401,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 3,
                 'section'   => null,
-                'place'     => 'پورت یکم',
+                'place_id'  => 6,
                 'capacity'  => 6,
                 'status'    => 1,
                 'info'      => null
@@ -409,7 +409,7 @@ class HostelsTableSeeder extends Seeder
             [
                 'number'    => 4,
                 'section'   => null,
-                'place'     => 'پورت یکم',
+                'place_id'  => 6,
                 'capacity'  => 4,
                 'status'    => 1,
                 'info'      => null

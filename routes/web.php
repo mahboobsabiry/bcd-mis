@@ -42,6 +42,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['as' => 'website.'], function () {
     // Index
     Route::get('/', [WebsiteController::class, 'index'])->name('index');
+    // Single Announcement
+    Route::get('/announcement/{title}', [WebsiteController::class, 'announcement'])->name('announcement');
 });
 
 Route::get('/optimize', function () {

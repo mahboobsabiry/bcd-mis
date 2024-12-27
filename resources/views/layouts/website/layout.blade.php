@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
     <head>
         <meta charset="utf-8">
-        <title>ریاست گمرک بلخ</title>
+        <title>@yield('title', 'ریاست گمرک ولایت بلخ')</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -37,7 +37,7 @@
         ======================================================= -->
     </head>
 
-    <body id="body">
+    <body id="body" style="font-family: Calibri !important;">
         <div class="translate fixed-top" id="google_translate_element"></div>
 
         <script type="text/javascript">
@@ -47,7 +47,9 @@
 
         @include('layouts.website.header')
 
-        @yield('content')
+        <main id="main">
+            @yield('content')
+        </main>
 
         @include('layouts.website.footer')
 
