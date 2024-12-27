@@ -17,7 +17,7 @@ jQuery(document).ready(function ($) {
 
   // Stick the header at top on scroll
   $("#navbar-banner").sticky({
-    topSpacing: 20,
+    topSpacing: 35,
     zIndex: '50'
   });
 

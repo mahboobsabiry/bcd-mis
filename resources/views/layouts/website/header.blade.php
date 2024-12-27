@@ -28,7 +28,7 @@
 
             <nav id="nav-menu-container">
                 <ul class="nav-menu">
-                    <li class="menu-active"><a href="#body" class="text-white">خانه</a></li>
+                    <li class="menu-active"><a href="#body" class="text-white">صفحه نخست</a></li>
                     <li><a href="#about" class="text-white">درباره ما</a></li>
                     <li><a href="#services" class="text-white">خدمات</a></li>
                     <li><a href="#portfolio" class="text-white">عکس ها</a></li>
