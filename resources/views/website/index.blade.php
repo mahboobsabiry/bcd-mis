@@ -56,7 +56,7 @@
                     <div class="col-lg-4">
                         <div class="card text-right">
                             <!-- Header -->
-                            <div class="card-header text-white" style="background-color: #303a78ff;">{{ \Morilog\Jalali\Jalalian::now()->format('F Y/m/d h:i') }}</div>
+                            <div class="card-header text-white" style="background-color: #303a78ff;">{{ \Morilog\Jalali\Jalalian::fromCarbon($announcement->created_at)->format('l Y/m/d h:i') }}</div>
                             <!-- Body -->
                             <div class="">
                                 <img src="{{ asset('website/images/announcements/' . $announcement->img) }}" alt="" class="img-fluid" style="margin: 0;">

@@ -26,7 +26,7 @@
                     <!-- Content -->
                     <div class="text-right">
                         <div class="mb-3">
-                            <span class="text-muted"><i class="fa fa-clock"></i> {{ \Morilog\Jalali\Jalalian::fromCarbon($announcement->created_at)->format('F Y/m/d h:i') }}</span>
+                            <span class="text-muted"><i class="fa fa-clock"></i> {{ \Morilog\Jalali\Jalalian::fromCarbon($announcement->created_at)->format('l Y/m/d h:i') }}</span>
                         </div>
                         <div class="flex-0">
                             <img class="img-fluid" src="{{ asset('website/images/announcements/' . $announcement->img) }}" alt="">
