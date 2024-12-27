@@ -1,7 +1,7 @@
 <footer id="footer">
     <div class="container">
         <div class="copyright">
-            &copy; Copyright <strong>Reveal</strong>. All Rights Reserved
+            &copy; حق کاپی <strong>وب‌سایت ریاست گمرک بلخ</strong>. تمامی حقوق محفوظ است
         </div>
         <div class="credits">
             <!--
@@ -10,7 +10,7 @@
               Licensing information: https://bootstrapmade.com/license/
               Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Reveal
             -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            توسعه داده شده توسط <a href="https://facebook.com/m.sabiry" target="_blank">محبوب الرحمن «صابری»</a>
         </div>
     </div>
 </footer>
