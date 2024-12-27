@@ -32,12 +32,19 @@
           Project Name: Balkh Custom Department Website & MIS
           Site URL: https://bcd.af/
           Author: BCD Office
-          Developer: Mahboobulrahman Sabiry
+          Developer: Mahboobulrahman Sabiry-
           License: https://bcd.af/license/
         ======================================================= -->
     </head>
 
     <body id="body">
+        <div class="translate fixed-top" id="google_translate_element"></div>
+
+        <script type="text/javascript">
+            function googleTranslateElementInit() {  new google.translate.TranslateElement({includedLanguages: 'fa,ps,,uz,en'}, 'google_translate_element');}
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
         @include('layouts.website.header')
 
         @yield('content')
