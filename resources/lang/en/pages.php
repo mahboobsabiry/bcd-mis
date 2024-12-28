@@ -196,4 +196,10 @@ return [
     	'users'	           => 'Users',
         'Teacher', '0784212382'
     ],
+
+    // Website
+    'website' => [
+        'announcement'  => 'Announcement',
+        'announcements' => 'Announcements'
+    ]
 ];

@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Warehouse\AssuranceController;
+use App\Http\Controllers\Admin\Website\AnnouncementController;
 use App\Http\Controllers\Website\WebsiteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -92,6 +93,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::resource('places', PlaceController::class);
 
     Route::get('received-documents', [DocumentController::class, 'received'])->name('documents.received');
+
+    // =============================== Website Routes ===================================
+    Route::group(['prefix' => 'website', 'as' => 'website.'], function () {
+        // Announcements
+        Route::resource('announcements', AnnouncementController::class);
+    });
 
     // =============================== Asycuda Routes ===================================
     Route::group(['prefix' => 'asycuda', 'as' => 'asycuda.'], function () {

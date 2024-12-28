@@ -206,4 +206,10 @@ return [
         'userProfile'      => 'پروفایل کاربر',
     	'users'	           => 'کاربران'
     ],
+
+    // Website
+    'website' => [
+        'announcement'  => 'اعلامیه',
+        'announcements' => 'اعلامیه‌ها'
+    ]
 ];

@@ -110,6 +110,7 @@ return [
     'videos'    => 'Videos',
     'view'      => 'View',
     'viewAll'   => 'View All',
+    'website'   => 'Website',
     'wellDone'  => 'Well Done',
     'yes'       => 'Yes',
     'you'       => 'You',

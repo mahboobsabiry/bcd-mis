@@ -515,6 +515,23 @@
             @endcan
             <!--/==/ End of General Management Of Warehouses -->
 
+            <!-- Website -->
+            @can('website_view')
+                <li class="nav-label">@lang('global.website')</li>
+
+                <!-- Website -->
+                @can('website_announcement_view')
+                    <li class="nav-item {{ request()->is('admin/website/announcements') || request()->is('admin/website/announcements/*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.website.announcements.index') }}">
+                            <i class="fa fa-bell"></i>
+                            <span class="sidemenu-label">
+                                @lang('pages.website.announcements')
+                            </span>
+                        </a>
+                    </li>
+                @endcan
+            @endcan
+
             <!-- Applications -->
             <li class="nav-label">@lang('admin.sidebar.applications')</li>
 
