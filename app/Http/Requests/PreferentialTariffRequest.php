@@ -6,14 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
-class PropertyRequest extends FormRequest
+class PreferentialTariffRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        abort_if(Gate::denies('office_employee_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('examination_pt_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return true;
     }
@@ -27,12 +27,8 @@ class PropertyRequest extends FormRequest
     {
         return [
             'company_id'    => 'required',
-            'doc_number'    => 'required',
+            'doc_number'    => 'required|unique:preferential_tariffs,doc_number',
             'doc_date'      => 'required',
-            'property_name' => 'required|min:3|max:148',
-            'property_code' => 'required|numeric|max:9999999999',
-            'ts_code'       => 'required|numeric|max:9999',
-            'weight'        => 'required|numeric|min:11|max:99999999',
             'start_date'    => 'required',
             'end_date'      => 'required',
             'info'          => 'nullable'

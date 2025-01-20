@@ -11,7 +11,7 @@
 	"use strict";
 
 	var methods = (function () {
-		// private properties and methods go here
+		// private preferential_tariffs and methods go here
 		var c = {
 				bcClass: 'sf-breadcrumb',
 				menuClass: 'sf-js-enabled',

@@ -119,7 +119,7 @@
             var state = hoverIntentData[instanceId];
             if (!state) { hoverIntentData[instanceId] = state = { id: instanceId }; }
 
-            // state properties:
+            // state preferential_tariffs:
             // id = instance ID, used to clean up data
             // timeoutId = timeout ID, reused for tracking mouse position and delaying "out" handler
             // isActive = plugin state, true after `over` is called just until `out` is called

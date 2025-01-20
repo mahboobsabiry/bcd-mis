@@ -1903,7 +1903,7 @@
     // <http://www.w3.org/TR/AERT#color-contrast>
 
     // `readability`
-    // Analyze the 2 colors and returns an object with the following properties:
+    // Analyze the 2 colors and returns an object with the following preferential_tariffs:
     //    `brightness`: difference in brightness between the two colors
     //    `color`: difference in color/hue between the two colors
     tinycolor.readability = function(color1, color2) {

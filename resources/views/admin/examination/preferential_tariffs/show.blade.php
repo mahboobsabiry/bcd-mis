@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 <!-- Title -->
-@section('title', 'جایداد - ' . $property->property_name)
+@section('title', 'جایداد - ' . $tariff->doc_number)
 <!-- Extra Styles -->
 @section('extra_css')
     <!---DataTables css-->
@@ -23,7 +23,7 @@
                         <a href="{{ route('admin.dashboard') }}">@lang('admin.dashboard.dashboard')</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('admin.examination.properties.index') }}">تعرفه ترجیحی - جایدات اموال</a>
+                        <a href="{{ route('admin.examination.preferential_tariffs.index') }}">تعرفه ترجیحی - جایدات اموال</a>
                     </li>
                     <li class="breadcrumb-item active"
                         aria-current="page">@lang('global.details')</li>
@@ -38,13 +38,13 @@
                             <!-- Delete -->
                             <a class="modal-effect btn btn-sm ripple btn-danger text-white"
                                data-effect="effect-sign" data-toggle="modal"
-                               href="#delete_record{{ $property->id }}"
+                               href="#delete_record{{ $tariff->id }}"
                                title="@lang('global.delete')">
                                 @lang('global.delete')
                                 <i class="fe fe-trash"></i>
                             </a>
 
-                            @include('admin.examination.properties.delete')
+                            @include('admin.examination.preferential_tariffs.delete')
                         </div>
                     @endcan
 
@@ -52,7 +52,7 @@
                         <div class="mr-2">
                             <!-- Edit -->
                             <a class="btn ripple bg-dark btn-sm text-white"
-                               href="{{ route('admin.examination.properties.edit', $property->id) }}">
+                               href="{{ route('admin.examination.preferential_tariffs.edit', $tariff->id) }}">
                                 @lang('global.edit')
                                 <i class="fe fe-edit"></i>
                             </a>
@@ -62,7 +62,8 @@
                     @can('examination_property_create')
                         <div class="mr-2">
                             <!-- Add -->
-                            <a class="btn ripple btn-primary btn-sm" href="{{ route('admin.examination.properties.create') }}">
+                            <a class="btn ripple btn-primary btn-sm"
+                               href="{{ route('admin.examination.preferential_tariffs.create') }}">
                                 @lang('global.new')
                                 <i class="fe fe-plus-circle"></i>
                             </a>
@@ -85,21 +86,22 @@
                         <!-- Heading -->
                         <div class="row font-weight-bold">
                             <div class="col-6">
-                                {{ $property->property_name }}
+                                {{ $tariff->doc_number }}
                             </div>
                             <div class="col-6 {{ app()->getLocale() == 'en' ? 'text-right' : 'text-left' }}">
-                                <i class="fa fa-bullseye"></i> جایداد اموال
+                                <i class="fa fa-bullseye"></i> جایداد اموال - تعرفه ترجیحی
                             </div>
                         </div>
                     </div>
 
                     <div class="card-body">
                         <div class="row mr-1 ml-1">
-                            <div class="{{ app()->getLocale() == 'en' ? 'pr-2' : 'pl-2' }}"><i class="far fa-clock"></i></div>
+                            <div class="{{ app()->getLocale() == 'en' ? 'pr-2' : 'pl-2' }}"><i class="far fa-clock"></i>
+                            </div>
                             <div>
                                 تاریخ ثبت
                                 <br>
-                                <p class="text-muted small">{{ \Morilog\Jalali\CalendarUtils::strftime('Y-m-d h:i a', strtotime($property->created_at)) }}</p>
+                                <p class="text-muted small">{{ \Morilog\Jalali\CalendarUtils::strftime('Y-m-d h:i a', strtotime($tariff->created_at)) }}</p>
                             </div>
                         </div>
                     </div>
@@ -121,7 +123,7 @@
                                     <div class="col-5 col-sm-4">
                                         <p class="fw-semi-bold mb-1">ID:</p>
                                     </div>
-                                    <div class="col">ID-{{ $property->id }}</div>
+                                    <div class="col">ID-{{ $tariff->id }}</div>
                                 </div>
 
                                 <!-- Company Name -->
@@ -129,7 +131,7 @@
                                     <div class="col-5 col-sm-4">
                                         <p class="fw-semi-bold mb-1">اسم شرکت:</p>
                                     </div>
-                                    <div class="col">{{ $property->company->name }}</div>
+                                    <div class="col">{{ $tariff->company->name ?? '' }}</div>
                                 </div>
 
                                 <!-- Company TIN -->
@@ -137,7 +139,7 @@
                                     <div class="col-5 col-sm-4">
                                         <p class="fw-semi-bold mb-1">نمبر تشخیصیه شرکت:</p>
                                     </div>
-                                    <div class="col">{{ $property->company->tin }}</div>
+                                    <div class="col">{{ $tariff->company->tin ?? '' }}</div>
                                 </div>
 
                                 <!-- Document Number -->
@@ -145,7 +147,7 @@
                                     <div class="col-5 col-sm-4">
                                         <p class="fw-semi-bold mb-1">نمبر مکتوب:</p>
                                     </div>
-                                    <div class="col">{{ $property->doc_number }}</div>
+                                    <div class="col">{{ $tariff->doc_number }}</div>
                                 </div>
 
                                 <!-- Document Date -->
@@ -153,7 +155,7 @@
                                     <div class="col-5 col-sm-4">
                                         <p class="fw-semi-bold mb-1">تاریخ مکتوب:</p>
                                     </div>
-                                    <div class="col">{{ $property->doc_date }}</div>
+                                    <div class="col">{{ $tariff->doc_date }}</div>
                                 </div>
 
                                 <!-- Description -->
@@ -162,7 +164,7 @@
                                         <p class="fw-semi-bold mb-1">معلومات اضافی:</p>
                                     </div>
                                     <div class="col">
-                                        <p class="fst-italic text-400 mb-1">{{ $property->info ?? '--' }}</p>
+                                        <p class="fst-italic text-400 mb-1">{{ $tariff->info ?? '--' }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -172,28 +174,21 @@
                             <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
                                 <h6 class="fw-semi-bold ls mb-3 text-uppercase font-weight-bold">معلومات جایداد</h6>
 
-                                <!-- Property Name -->
+                                <!-- PreferentialTariff Name -->
                                 <div class="row">
                                     <div class="col-5 col-sm-4">
-                                        <p class="fw-semi-bold mb-1">نوع جنس:</p>
+                                        <p class="fw-semi-bold mb-1">تعداد اقلام:</p>
                                     </div>
-                                    <div class="col">{{ $property->property_name }}</div>
-                                </div>
-
-                                <!-- Property Code & TSC -->
-                                <div class="row">
-                                    <div class="col-5 col-sm-4">
-                                        <p class="fw-semi-bold mb-1">کد جنس و TSC:</p>
-                                    </div>
-                                    <div class="col">{{ $property->property_code . ' (TSC' . $property->ts_code . ')' }}</div>
+                                    <div class="col">{{ $tariff->property_name }}</div>
                                 </div>
 
                                 <!-- Weight -->
                                 <div class="row">
                                     <div class="col-5 col-sm-4">
-                                        <p class="fw-semi-bold mb-1">مقدار جنس:</p>
+                                        <p class="fw-semi-bold mb-1">مقدار مجموعی جنس:</p>
                                     </div>
-                                    <div class="col">{{ $property->weight }}<sup>{{ app()->getLocale() == 'en' ? 'kg' : 'کیلوگرام' }}</sup></div>
+                                    <div class="col">{{ $tariff->pt_items->sum('weight') }}
+                                        <sup>{{ app()->getLocale() == 'en' ? 'kg' : 'کیلوگرام' }}</sup></div>
                                 </div>
 
                                 <!-- Start Date -->
@@ -201,7 +196,7 @@
                                     <div class="col-5 col-sm-4">
                                         <p class="fw-semi-bold mb-1">تاریخ شروع:</p>
                                     </div>
-                                    <div class="col">{{ $property->start_date }}</div>
+                                    <div class="col">{{ $tariff->start_date }}</div>
                                 </div>
 
                                 <!-- End Date -->
@@ -209,7 +204,7 @@
                                     <div class="col-5 col-sm-4">
                                         <p class="fw-semi-bold mb-1">تاریخ ختم:</p>
                                     </div>
-                                    <div class="col">{{ $property->end_date }}</div>
+                                    <div class="col">{{ $tariff->end_date }}</div>
                                 </div>
 
                                 <!-- Number of Valid Days -->
@@ -219,8 +214,8 @@
                                     </div>
                                     <div class="col">
                                         @php
-                                            $start_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $property->start_date)->toCarbon();
-                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $property->end_date)->toCarbon();
+                                            $start_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->start_date)->toCarbon();
+                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->end_date)->toCarbon();
                                             $valid_days = $start_date->diffInDays($end_date);
                                             echo $valid_days;
                                         @endphp
@@ -234,7 +229,7 @@
                                     </div>
                                     <div class="col">
                                         @php
-                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $property->end_date)->toCarbon();
+                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->end_date)->toCarbon();
                                             $remaining_days = now()->diffInDays($end_date);
                                         @endphp
                                         @if($remaining_days > 10)

@@ -171,22 +171,22 @@ class PermissionsTableSeeder extends Seeder
             [
                 'name'      => 'office_employee_leave_delete'
             ],
-            // ========== Property Examination ==========
+            // ========== PreferentialTariff Examination ==========
             [
                 'name'      => 'examination_view'
             ],
             // Assurance
             [
-                'name'      => 'examination_property_view'
+                'name'      => 'examination_pt_view'
             ],
             [
-                'name'      => 'examination_property_create'
+                'name'      => 'examination_pt_create'
             ],
             [
-                'name'      => 'examination_property_edit'
+                'name'      => 'examination_pt_edit'
             ],
             [
-                'name'      => 'examination_property_delete'
+                'name'      => 'examination_pt_delete'
             ],
             // ========== Warehouse ==========
             [

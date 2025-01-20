@@ -46,8 +46,8 @@
             <!-- Btn List -->
             <div class="btn btn-list">
                 <!-- Add New -->
-                @can('examination_property_create')
-                    <a class="btn ripple btn-primary" href="{{ route('admin.examination.properties.create') }}">
+                @can('examination_pt_create')
+                    <a class="btn ripple btn-primary" href="{{ route('admin.examination.preferential_tariffs.create') }}">
                         <i class="fe fe-plus-circle"></i> @lang('global.new')
                     </a>
                 @endcan
@@ -64,7 +64,7 @@
                 <!-- Table Card -->
                 <div class="card">
                     <div class="card-header tx-15 tx-bold">
-                        مجموع جایداد اموال ({{ $properties->count() }})
+                        مجموع تعرفه ترجیحی اموال ({{ $tariffs->count() }})
                     </div>
 
                     <div class="card-body">
@@ -80,9 +80,8 @@
                                         <th>اسم و نمبر تشخیصیه شرکت</th>
                                         <th>نمبر مکتوب</th>
                                         <th>تاریخ مکتوب</th>
-                                        <th>نوع جنس</th>
-                                        <th>کد اموال</th>
-                                        <th>مقدار جنس (Kg)</th>
+                                        <th>تعداد اقلام</th>
+                                        <th>مقدار مجموعی جنس (Kg)</th>
                                         <th>تاریخ شروع</th>
                                         <th>تاریخ ختم</th>
                                         <th>مدت اعتبار</th>
@@ -94,25 +93,24 @@
                                     </thead>
 
                                     <tbody>
-                                    @foreach($properties as $property)
+                                    @foreach($tariffs as $tariff)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $property->user->name }}</td>
-                                            <td>{{ $property->company->name . ' - ' . $property->company->tin }}</td>
-                                            <td>{{ $property->doc_number }}</td>
-                                            <td>{{ $property->doc_date }}</td>
+                                            <td>{{ $tariff->user->name }}</td>
+                                            <td>{{ $tariff->company->name . ' - ' . $tariff->company->tin }}</td>
                                             <td>
-                                                <a href="{{ route('admin.examination.properties.show', $property->id ) }}">{{ $property->property_name }}</a>
+                                                <a href="{{ route('admin.examination.preferential_tariffs.show', $tariff->id ) }}">{{ $tariff->doc_number }}</a>
                                             </td>
-                                            <td>{{ $property->property_code . ' TSC-'. $property->ts_code }}</td>
-                                            <td>{{ $property->weight }}<sup>{{ app()->getLocale() == 'en' ? 'kg' : 'کیلوگرام' }}</sup></td>
-                                            <td>{{ $property->start_date }}</td>
-                                            <td>{{ $property->end_date }}</td>
+                                            <td>{{ $tariff->doc_date }}</td>
+                                            <td>{{ $tariff->pt_items->count() }}</td>
+                                            <td>{{ $tariff->pt_items->sum('weight') }}<sup>{{ app()->getLocale() == 'en' ? 'Kg' : 'کیلوگرام' }}</sup></td>
+                                            <td>{{ $tariff->start_date }}</td>
+                                            <td>{{ $tariff->end_date }}</td>
                                             <!-- Valid Days -->
                                             <td>
                                                 @php
-                                                    $start_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $property->start_date)->toCarbon();
-                                                    $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $property->end_date)->toCarbon();
+                                                    $start_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->start_date)->toCarbon();
+                                                    $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->end_date)->toCarbon();
                                                     $valid_days = $start_date->diffInDays($end_date);
                                                     echo $valid_days;
                                                 @endphp
@@ -120,7 +118,7 @@
                                             <!-- Remaining Days -->
                                             <td>
                                                 @php
-                                                    $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $property->end_date)->toCarbon();
+                                                    $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->end_date)->toCarbon();
                                                     $remaining_days = now()->diffInDays($end_date);
                                                 @endphp
                                                 @if($remaining_days > 10)
@@ -133,13 +131,13 @@
                                             </td>
 
                                             <td>
-                                                <a href="{{ $property->image }}" target="_blank">
-                                                    <img src="{{ $property->image }}" alt="" width="70">
+                                                <a href="{{ $tariff->image }}" target="_blank">
+                                                    <img src="{{ $tariff->image }}" alt="" width="70">
                                                 </a>
                                             </td>
 
-                                            <td>{{ $property->info }}</td>
-                                            <td>{{ \Morilog\Jalali\CalendarUtils::strftime('Y-F-d', strtotime($property->created_at)) }}</td>
+                                            <td>{{ $tariff->info }}</td>
+                                            <td>{{ \Morilog\Jalali\CalendarUtils::strftime('Y-F-d', strtotime($tariff->created_at)) }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

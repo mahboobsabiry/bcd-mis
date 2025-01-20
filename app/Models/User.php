@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Asycuda\COAL;
-use App\Models\Examination\Property;
+use App\Models\Examination\PreferentialTariff;
 use App\Models\Office\Employee;
 use App\Models\Warehouse\Assurance;
 use App\Traits\HasPhoto;
@@ -112,6 +112,6 @@ class User extends Authenticatable
     // Has Many Properties
     public function properties() : HasMany
     {
-        return $this->hasMany(Property::class);
+        return $this->hasMany(PreferentialTariff::class);
     }
 }

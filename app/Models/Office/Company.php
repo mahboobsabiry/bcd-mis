@@ -2,7 +2,7 @@
 
 namespace App\Models\Office;
 
-use App\Models\Examination\Property;
+use App\Models\Examination\PreferentialTariff;
 use App\Models\Warehouse\Assurance;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,8 +27,8 @@ class Company extends Model
     }
 
     // Has Many Properties
-    public function properties() : HasMany
+    public function pt() : HasMany
     {
-        return $this->hasMany(Property::class);
+        return $this->hasMany(PreferentialTariff::class, 'company_id', 'id');
     }
 }

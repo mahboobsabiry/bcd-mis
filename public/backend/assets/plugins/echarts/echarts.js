@@ -222,7 +222,7 @@ function $override(name, fn) {
  * Those data types will be assgined using the orginal data:
  *     BUILTIN_OBJECT
  * Instance of user defined class will be cloned to a plain object, without
- * properties in prototype.
+ * preferential_tariffs in prototype.
  * Other data types is not supported (not sure what will happen).
  *
  * Caution: do not support clone Date, for performance consideration.
@@ -4144,7 +4144,7 @@ Animatable.prototype = {
 
         if (!target) {
             zrLog(
-                'Property "'
+                'PreferentialTariff "'
                 + path
                 + '" is not existed in element '
                 + el.id
@@ -4267,7 +4267,7 @@ Animatable.prototype = {
             callback && callback();
         }
         // Start after all animators created
-        // Incase any animator is done immediately when all animation properties are not changed
+        // Incase any animator is done immediately when all animation preferential_tariffs are not changed
         for (var i = 0; i < animators.length; i++) {
             animators[i]
                 .done(done)
@@ -7467,12 +7467,12 @@ function pushTokens(block, str, styleName) {
 
 function makeFont(style) {
     // FIXME in node-canvas fontWeight is before fontStyle
-    // Use `fontSize` `fontFamily` to check whether font properties are defined.
+    // Use `fontSize` `fontFamily` to check whether font preferential_tariffs are defined.
     return (style.fontSize || style.fontFamily) && [
         style.fontStyle,
         style.fontWeight,
         (style.fontSize || 12) + 'px',
-        // If font properties are defined, `fontFamily` should not be ignored.
+        // If font preferential_tariffs are defined, `fontFamily` should not be ignored.
         style.fontFamily || 'sans-serif'
     ].join(' ') || style.textFont || style.font;
 }
@@ -8105,7 +8105,7 @@ function Displayable(opts) {
 
     Element.call(this, opts);
 
-    // Extend properties
+    // Extend preferential_tariffs
     for (var name in opts) {
         if (
             opts.hasOwnProperty(name) &&
@@ -9589,7 +9589,7 @@ function clientToLocal(el, e, out, calculate) {
     // According to the W3C Working Draft, offsetX and offsetY should be relative
     // to the padding edge of the target element. The only browser using this convention
     // is IE. Webkit uses the border edge, Opera uses the content edge, and FireFox does
-    // not support the properties.
+    // not support the preferential_tariffs.
     // (see http://www.jacklmoore.com/notes/mouse-position/)
     // In zr painter.dom, padding edge equals to border edge.
 
@@ -9758,7 +9758,7 @@ var Animation = function (options) {
 
     this.onframe = options.onframe || function() {};
 
-    // private properties
+    // private preferential_tariffs
     this._clips = [];
 
     this._running = false;
@@ -16015,11 +16015,11 @@ function doSingleEnterHover(el) {
         //         }
         //     }
         // },
-        // where properties of `emphasis` may not appear in `normal`. We previously use
+        // where preferential_tariffs of `emphasis` may not appear in `normal`. We previously use
         // module:echarts/util/model#defaultEmphasis to merge `normal` to `emphasis`.
         // But consider rich text and setOption in merge mode, it is impossible to cover
-        // all properties in merge. So we use merge mode when setting style here, where
-        // only properties that is not `null/undefined` can be set. The disadventage:
+        // all preferential_tariffs in merge. So we use merge mode when setting style here, where
+        // only preferential_tariffs that is not `null/undefined` can be set. The disadventage:
         // null/undefined can not be used to remove style any more in `emphasis`.
         style.extendFrom(el.__hoverStl);
 
@@ -16247,7 +16247,7 @@ function setLabelStyle(
 }
 
 /**
- * Set basic textStyle properties.
+ * Set basic textStyle preferential_tariffs.
  * @param {Object|module:zrender/graphic/Style} textStyle
  * @param {module:echarts/model/Model} model
  * @param {Object} [specifiedTextStyle] Can be overrided by settings in model.
@@ -16431,7 +16431,7 @@ function setTokenTextStyle(textStyle, textStyleModel, globalTextStyle, opt, isEm
     }
 
     // Do not use `getFont` here, because merge should be supported, where
-    // part of these properties may be changed in emphasis style, and the
+    // part of these preferential_tariffs may be changed in emphasis style, and the
     // others should remain their original value got from normal style.
     textStyle.fontStyle = textStyleModel.getShallow('fontStyle') || globalTextStyle.fontStyle;
     textStyle.fontWeight = textStyleModel.getShallow('fontWeight') || globalTextStyle.fontWeight;
@@ -16565,7 +16565,7 @@ function animateOrSetProps(isUpdate, el, props, animatableModel, dataIndex, cb) 
 }
 
 /**
- * Update graphic element properties with or without animation according to the
+ * Update graphic element preferential_tariffs with or without animation according to the
  * configuration in series.
  *
  * Caution: this method will stop previous animation.
@@ -16591,7 +16591,7 @@ function updateProps(el, props, animatableModel, dataIndex, cb) {
 }
 
 /**
- * Init graphic element properties with or without animation according to the
+ * Init graphic element preferential_tariffs with or without animation according to the
  * configuration in series.
  *
  * Caution: this method will stop previous animation.
@@ -17031,7 +17031,7 @@ Model.prototype = {
     },
 
     setReadOnly: function (properties) {
-        
+
     },
 
     // If path is null/undefined, return null/undefined.
@@ -17607,7 +17607,7 @@ var makeGetter = (function () {
  * @param {module:echarts/model/Global} ecModel
  * @param {string|Object} finder
  *        If string, e.g., 'geo', means {geoIndex: 0}.
- *        If Object, could contain some of these properties below:
+ *        If Object, could contain some of these preferential_tariffs below:
  *        {
  *            seriesIndex, seriesId, seriesName,
  *            geoIndex, geoId, geoName,
@@ -17617,7 +17617,7 @@ var makeGetter = (function () {
  *            gridIndex, gridId, gridName,
  *            ... (can be extended)
  *        }
- *        Each properties can be number|string|Array.<number>|Array.<string>
+ *        Each preferential_tariffs can be number|string|Array.<number>|Array.<string>
  *        For example, a finder could be
  *        {
  *            seriesIndex: 3,
@@ -18179,7 +18179,7 @@ function getLayoutRect(
  * Position a zr element in viewport
  *  Group position is specified by either
  *  {left, top}, {right, bottom}
- *  If all properties exists, right and bottom will be igonred.
+ *  If all preferential_tariffs exists, right and bottom will be igonred.
  *
  * Logic:
  *     1. Scale (against origin point in parent coord)
@@ -18260,7 +18260,7 @@ function positionElement(el, positionInfo, containerRect, margin, opt) {
 }
 
 /**
- * @param {Object} option Contains some of the properties in HV_NAMES.
+ * @param {Object} option Contains some of the preferential_tariffs in HV_NAMES.
  * @param {number} hvIdx 0: horizontal; 1: vertical.
  */
 function sizeCalculable(option, hvIdx) {
@@ -21423,7 +21423,7 @@ echartsProto.getConnectedDataURL = function (opts) {
  * See CoordinateSystem#convertToPixel.
  * @param {string|Object} finder
  *        If string, e.g., 'geo', means {geoIndex: 0}.
- *        If Object, could contain some of these properties below:
+ *        If Object, could contain some of these preferential_tariffs below:
  *        {
  *            seriesIndex / seriesId / seriesName,
  *            geoIndex / geoId, geoName,
@@ -21443,7 +21443,7 @@ echartsProto.convertToPixel = curry(doConvertPixel, 'convertToPixel');
  * See CoordinateSystem#convertFromPixel.
  * @param {string|Object} finder
  *        If string, e.g., 'geo', means {geoIndex: 0}.
- *        If Object, could contain some of these properties below:
+ *        If Object, could contain some of these preferential_tariffs below:
  *        {
  *            seriesIndex / seriesId / seriesName,
  *            geoIndex / geoId / geoName,
@@ -21485,7 +21485,7 @@ function doConvertPixel(methodName, finder, value) {
  * Is the specified coordinate systems or components contain the given pixel point.
  * @param {string|Object} finder
  *        If string, e.g., 'geo', means {geoIndex: 0}.
- *        If Object, could contain some of these properties below:
+ *        If Object, could contain some of these preferential_tariffs below:
  *        {
  *            seriesIndex / seriesId / seriesName,
  *            geoIndex / geoId / geoName,
@@ -21539,7 +21539,7 @@ echartsProto.containPixel = function (finder, value) {
  * Get visual from series or data.
  * @param {string|Object} finder
  *        If string, e.g., 'series', means {seriesIndex: 0}.
- *        If Object, could contain some of these properties below:
+ *        If Object, could contain some of these preferential_tariffs below:
  *        {
  *            seriesIndex / seriesId / seriesName,
  *            dataIndex / dataIndexInside
@@ -23216,28 +23216,28 @@ var List = function (dimensions, hostModel) {
     this.stackedOn = null;
 
     /**
-     * Global visual properties after visual coding
+     * Global visual preferential_tariffs after visual coding
      * @type {Object}
      * @private
      */
     this._visual = {};
 
     /**
-     * Globel layout properties.
+     * Globel layout preferential_tariffs.
      * @type {Object}
      * @private
      */
     this._layout = {};
 
     /**
-     * Item visual properties after visual coding
+     * Item visual preferential_tariffs after visual coding
      * @type {Array.<Object>}
      * @private
      */
     this._itemVisuals = [];
 
     /**
-     * Item layout properties after layout
+     * Item layout preferential_tariffs after layout
      * @type {Array.<Object>}
      * @private
      */
@@ -23895,7 +23895,7 @@ listProto.map = function (dimensions, cb, stack, context) {
     );
 
     var list = cloneListForMapAndSample(this, dimensions);
-    // Following properties are all immutable.
+    // Following preferential_tariffs are all immutable.
     // So we can reference to the same value
     var indices = list.indices = this.indices;
 
@@ -24193,7 +24193,7 @@ listProto.eachItemGraphicEl = function (cb, context) {
 };
 
 /**
- * Shallow clone a new list except visual and layout properties, and graph elements.
+ * Shallow clone a new list except visual and layout preferential_tariffs, and graph elements.
  * New list only change the indices.
  */
 listProto.cloneShallow = function () {
@@ -27284,7 +27284,7 @@ symbolProto.setDraggable = function (draggable) {
 };
 
 /**
- * Update symbol properties
+ * Update symbol preferential_tariffs
  * @param {module:echarts/data/List} data
  * @param {number} idx
  * @param {Object} [seriesScope]
@@ -27337,7 +27337,7 @@ symbolProto.updateData = function (data, idx, seriesScope) {
     this._seriesModel = seriesModel;
 };
 
-// Update common properties
+// Update common preferential_tariffs
 var normalStyleAccessPath = ['itemStyle', 'normal'];
 var emphasisStyleAccessPath = ['itemStyle', 'emphasis'];
 var normalLabelAccessPath = ['label', 'normal'];
@@ -30003,7 +30003,7 @@ gridProto._initCartesian = function (gridModel, ecModel, api) {
 };
 
 /**
- * Update cartesian properties from series
+ * Update cartesian preferential_tariffs from series
  * @param  {module:echarts/model/Option} option
  * @private
  */
@@ -31072,7 +31072,7 @@ function makeAxisPointerModel(
     volatileOption.snap = axis.type !== 'category' && !!triggerTooltip;
 
     // Compatibel with previous behavior, tooltip axis do not show label by default.
-    // Only these properties can be overrided from tooltip to axisPointer.
+    // Only these preferential_tariffs can be overrided from tooltip to axisPointer.
     if (tooltipAxisPointerModel.get('type') === 'cross') {
         volatileOption.type = 'line';
     }
@@ -35672,7 +35672,7 @@ var MapSeries = SeriesModel.extend({
 
         ///// Layout with center and size
         // If you wan't to put map in a fixed size box with right aspect ratio
-        // This two properties may more conveninet
+        // This two preferential_tariffs may more conveninet
         // layoutCenter: [50%, 50%]
         // layoutSize: 100
 
@@ -36179,7 +36179,7 @@ MapDraw.prototype = {
 
         each$1(geo.regions, function (region) {
 
-            // Consider in GeoJson properties.name may be duplicated, for example,
+            // Consider in GeoJson preferential_tariffs.name may be duplicated, for example,
             // there is multiple region named "United Kindom" or "France" (so many
             // colonies). And it is not appropriate to merge them in geo, which
             // will make them share the same label and bring trouble in label
@@ -42535,7 +42535,7 @@ lineProto._updateCommonStl = function (lineData, idx, seriesScope) {
     }
 
     if (hoverShowLabel) {
-        // Only these properties supported in this emphasis style here.
+        // Only these preferential_tariffs supported in this emphasis style here.
         label.hoverStyle = {
             text: emphasisText,
             textFill: hoverLabelModel.getTextColor(true),
@@ -44089,7 +44089,7 @@ var GaugeView = Chart.extend({
 
             sector.setStyle(lineStyleModel.getLineStyle(
                 // Because we use sector to simulate arc
-                // so the properties for stroking are useless
+                // so the preferential_tariffs for stroking are useless
                 ['color', 'borderWidth', 'borderColor']
             ));
 
@@ -45178,7 +45178,7 @@ Parallel.prototype = {
     },
 
     /**
-     * Update properties from series
+     * Update preferential_tariffs from series
      * @private
      */
     _updateAxesFromSeries: function (parallelModel, ecModel) {
@@ -48504,7 +48504,7 @@ function makeWhiskerEndsShape(whiskerEnds) {
 }
 
 /**
- * Update symbol properties
+ * Update symbol preferential_tariffs
  * @param  {module:echarts/data/List} data
  * @param  {number} idx
  */
@@ -48790,7 +48790,7 @@ var BoxplotView = Chart.extend({
 
 mixin(BoxplotView, viewMixin, true);
 
-// Update common properties
+// Update common preferential_tariffs
 var normalStyleAccessPath$1 = ['itemStyle', 'normal'];
 var emphasisStyleAccessPath$1 = ['itemStyle', 'emphasis'];
 
@@ -49129,7 +49129,7 @@ var CandlestickView = Chart.extend({
 
 mixin(CandlestickView, viewMixin, true);
 
-// Update common properties
+// Update common preferential_tariffs
 var normalStyleAccessPath$2 = ['itemStyle', 'normal'];
 var emphasisStyleAccessPath$2 = ['itemStyle', 'emphasis'];
 
@@ -49582,7 +49582,7 @@ effectSymbolProto.downplay = function () {
 };
 
 /**
- * Update symbol properties
+ * Update symbol preferential_tariffs
  * @param  {module:echarts/data/List} data
  * @param  {number} idx
  */
@@ -55514,7 +55514,7 @@ var GraphicModel = extendComponentModel({
 
     defaultOption: {
 
-        // Extra properties for each elements:
+        // Extra preferential_tariffs for each elements:
         //
         // left/right/top/bottom: (like 12, '22%', 'center', default undefined)
         //      If left/rigth is set, shape.x/shape.cx/position will not be used.
@@ -59047,7 +59047,7 @@ function updatePolarScale(ecModel, api) {
 }
 
 /**
- * Set common axis properties
+ * Set common axis preferential_tariffs
  * @param {module:echarts/coord/polar/AngleAxis|module:echarts/coord/polar/RadiusAxis}
  * @param {module:echarts/coord/polar/AxisModel}
  * @inner
@@ -59688,7 +59688,7 @@ var GeoModel = ComponentModel.extend({
 
         ///// Layout with center and size
         // If you wan't to put map in a fixed size box with right aspect ratio
-        // This two properties may more conveninet
+        // This two preferential_tariffs may more conveninet
         // layoutCenter: [50%, 50%]
         // layoutSize: 100
 
@@ -68171,7 +68171,7 @@ function dataTransform(seriesModel, item) {
         var axisInfo = getAxisInfo$1(item, data, coordSys, seriesModel);
 
         // Clone the option
-        // Transform the properties xAxis, yAxis, radiusAxis, angleAxis, geoCoord to value
+        // Transform the preferential_tariffs xAxis, yAxis, radiusAxis, angleAxis, geoCoord to value
         item = clone(item);
 
         if (item.type

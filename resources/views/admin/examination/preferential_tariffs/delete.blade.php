@@ -1,15 +1,15 @@
 <!-- Delete -->
-<div class="modal" id="delete_record{{ $property->id }}">
+<div class="modal" id="delete_record{{ $tariff->id }}">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6 class="modal-title">@lang('global.delete') جایداد {{ $property->property_name }} <i class="fe fe-trash"></i></h6>
+                <h6 class="modal-title">@lang('global.delete') تعرفه ترجیحی <i class="fe fe-trash"></i></h6>
                 <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
             </div>
 
             <!-- Form -->
-            <form method="post" action="{{ route('admin.examination.properties.destroy', $property->id) }}" data-parsley-validate="">
+            <form method="post" action="{{ route('admin.examination.preferential_tariffs.destroy', $tariff->id) }}" data-parsley-validate="">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">

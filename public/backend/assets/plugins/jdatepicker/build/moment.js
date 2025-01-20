@@ -201,7 +201,7 @@
         return m;
     }
 
-    // Plugins that add properties should also add the key here (null value),
+    // Plugins that add preferential_tariffs should also add the key here (null value),
     // so we can properly clone ourselves.
     var momentProperties = (hooks.momentProperties = []),
         updateInProgress = false;
@@ -396,7 +396,7 @@
                 !hasOwnProp(childConfig, prop) &&
                 isObject(parentConfig[prop])
             ) {
-                // make sure changes to properties don't modify parent config
+                // make sure changes to preferential_tariffs don't modify parent config
                 res[prop] = extend({}, res[prop]);
             }
         }

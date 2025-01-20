@@ -1,0 +1,17 @@
+{
+    "name": "BCD MIS",
+    "short_name": "BCD MIS",
+    "description": "BCD MIS",
+    "start_url": "http://bcd-mis.af",
+    "display": "standalone",
+    "background_color": "#EBEAEA",
+    "theme_color": "#F9FAFB",
+    "orentation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/assets/images/logo.png",
+            "type": "image/png",
+            "sizes": "*"
+        }
+    ]
+}

@@ -60,17 +60,18 @@
 
                         <!-- PHP -->
                         @php
-                        $auth_user_pos = auth()->user()->employee->position;
+                            $auth_user_pos = auth()->user()->employee->position;
                         @endphp
 
-                        <!-- Sub Items -->
+                            <!-- Sub Items -->
                         <ul class="nav-sub">
                             <!-- Sent Documents -->
                             <li class="nav-sub-item {{ request()->is('admin/documents') || request()->is('admin/documents/*') ? 'active' : '' }}">
                                 <a class="nav-sub-link" href="{{ route('admin.documents.index') }}">
                                     @lang('admin.sidebar.sentDocs')
                                     @if($auth_user_pos)
-                                        ({{ count(\App\Models\Document::all()->where('position_id', $auth_user_pos->id)) }})
+                                        ({{ count(\App\Models\Document::all()->where('position_id', $auth_user_pos->id)) }}
+                                        )
                                     @endif
                                 </a>
                             </li>
@@ -84,12 +85,14 @@
                                          // Check if Authenticated Employee is On Duty or not
                                          if (\Illuminate\Support\Facades\Auth::user()->employee->on_duty == 1) {
                                              // Count all Received Documents
-                                             \App\Models\Document::all()->where('receiver', \Illuminate\Support\Facades\Auth::user()->employee->duty_position)->count(); + \App\Models\Document::all()->where('cc', strpos(\Illuminate\Support\Facades\Auth::user()->employee->duty_position, $pos_docs))->count();
+                                             \App\Models\Document::all()->where('receiver', \Illuminate\Support\Facades\Auth::user()->employee->duty_position)->count();
+                                             +\App\Models\Document::all()->where('cc', strpos(\Illuminate\Support\Facades\Auth::user()->employee->duty_position, $pos_docs))->count();
                                          } else {
                                              // Count all Received Documents
-                                             \App\Models\Document::all()->where('receiver', $auth_user_pos->title)->count(); + \App\Models\Document::all()->where('cc', str()->contains(\App\Models\Document::all()->pluck('cc'), $auth_user_pos->title))->count();
+                                             \App\Models\Document::all()->where('receiver', $auth_user_pos->title)->count();
+                                             +\App\Models\Document::all()->where('cc', str()->contains(\App\Models\Document::all()->pluck('cc'), $auth_user_pos->title))->count();
                                          }
-                                    ?>)
+                                         ?>)
                                 </a>
                             </li>
                         </ul>
@@ -110,9 +113,9 @@
 
                     <a class="nav-link with-sub" href="javascript:void(0)">
                         <i class="ion ion-ios-desktop"></i>
-{{--                        @if(count(\App\Models\Asycuda\COAL::all()->where('expire_date', "<=", today())->where('status', 1)) >= 1)--}}
-{{--                            <span class="pulse"></span>--}}
-{{--                        @endif--}}
+                        {{--                        @if(count(\App\Models\Asycuda\COAL::all()->where('expire_date', "<=", today())->where('status', 1)) >= 1)--}}
+                        {{--                            <span class="pulse"></span>--}}
+                        {{--                        @endif--}}
                         <span class="sidemenu-label">@lang('admin.sidebar.systemGenMgmt')</span>
                         <i class="angle fe fe-chevron-right"></i>
                     </a>
@@ -143,9 +146,9 @@
                                    href="{{ route('admin.asycuda.coal.index') }}">
                                     @lang('admin.sidebar.companiesAL')
                                     ({{ count(\App\Models\Asycuda\COAL::all()->where('status', 1)) }})
-{{--                                    @if(count(\App\Models\Asycuda\COAL::all()->where('expire_date', "<=", today())->where('status', 1)) >= 1)--}}
-{{--                                        &nbsp;<span class="fas fa-building fa-pulse text-danger"></span>--}}
-{{--                                    @endif--}}
+                                    {{--                                    @if(count(\App\Models\Asycuda\COAL::all()->where('expire_date', "<=", today())->where('status', 1)) >= 1)--}}
+                                    {{--                                        &nbsp;<span class="fas fa-building fa-pulse text-danger"></span>--}}
+                                    {{--                                    @endif--}}
                                 </a>
                             </li>
 
@@ -384,7 +387,8 @@
                             <li class="nav-sub-item {{ request()->is('admin/office/main-employees') ? 'active' : '' }}">
                                 <a class="nav-sub-link" href="{{ route('admin.office.employees.main') }}">
                                     @lang('pages.employees.mainPosition')
-                                    ({{ \App\Models\Office\Employee::all()->where('status', 0)->where('on_duty', 0)->count() }})
+                                    ({{ \App\Models\Office\Employee::all()->where('status', 0)->where('on_duty', 0)->count() }}
+                                    )
                                 </a>
                             </li>
 
@@ -392,7 +396,8 @@
                             <li class="nav-sub-item {{ request()->is('admin/office/on-duty-employees') ? 'active' : '' }}">
                                 <a class="nav-sub-link" href="{{ route('admin.office.employees.on_duty') }}">
                                     @lang('pages.employees.onDuty')
-                                    ({{ \App\Models\Office\Employee::all()->where('status', 0)->where('on_duty', 1)->count() }})
+                                    ({{ \App\Models\Office\Employee::all()->where('status', 0)->where('on_duty', 1)->count() }}
+                                    )
                                 </a>
                             </li>
 
@@ -423,7 +428,8 @@
 
                             <!-- Suspended Employees -->
                             <li class="nav-sub-item {{ request()->is('admin/office/suspended-employees') ? 'active' : '' }}">
-                                <a class="nav-sub-link" href="{{ route('admin.office.employees.suspended_employees') }}">
+                                <a class="nav-sub-link"
+                                   href="{{ route('admin.office.employees.suspended_employees') }}">
                                     <span class="text-secondary">@lang('admin.sidebar.suspended') </span>&nbsp;
                                     ({{ \App\Models\Office\Employee::all()->where('status', 4)->count() }})
                                     @if(count(\App\Models\Office\Employee::all()->where('status', 4)) >= 1)
@@ -448,18 +454,19 @@
                 @can('office_hostel_view')
                     <li class="nav-item {{ request()->url() == route('admin.office.hostel.index') || request()->is('admin/office/hostel/*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('admin.office.hostel.index') }}">
-                            <i class="fa fa-building"></i><span class="sidemenu-label">@lang('pages.hostel.hostel')</span>
+                            <i class="fa fa-building"></i><span
+                                class="sidemenu-label">@lang('pages.hostel.hostel')</span>
                         </a>
                     </li>
                 @endcan
             @endcan
 
-            <!-- General Management Of Property Examination -->
+            <!-- General Management Of PreferentialTariff Examination -->
             @can('examination_view')
                 <li class="nav-label">@lang('admin.sidebar.exPropGenMgmt')</li>
-                @can('examination_property_view')
-                    <li class="nav-item {{ request()->is('admin/examination/properties') ||
-                        request()->is('admin/examination/properties/*') ? 'active show' : '' }}">
+                @can('examination_pt_view')
+                    <li class="nav-item {{ request()->is('admin/examination/preferential_tariffs') ||
+                        request()->is('admin/examination/preferential_tariffs/*') ? 'active show' : '' }}">
                         <a class="nav-link with-sub" href="javascript:void(0)">
                             <i class="fa fa-file-alt"></i>
                             <span class="sidemenu-label">@lang('admin.sidebar.preferredTarrif')</span>
@@ -468,16 +475,18 @@
 
                         <ul class="nav-sub">
                             <!-- Properties -->
-                            <li class="nav-sub-item {{ request()->is('admin/examination/properties') ||
-                                request()->is('admin/examination/properties/*') ? 'active' : '' }}">
+                            <li class="nav-sub-item {{ request()->is('admin/examination/preferential_tariffs') ||
+                                request()->is('admin/examination/preferential_tariffs/*') ? 'active' : '' }}">
                                 <a class="nav-sub-link"
-                                   href="{{ route('admin.examination.properties.index') }}">@lang('admin.sidebar.propertyEstate') ({{ count(\App\Models\Examination\Property::all()->where('status', 1)) }})</a>
+                                   href="{{ route('admin.examination.preferential_tariffs.index') }}">@lang('admin.sidebar.propertyEstate')
+                                    ({{ count(\App\Models\Examination\PreferentialTariff::all()->where('status', 1)) }}
+                                    )</a>
                             </li>
                         </ul>
                     </li>
                 @endif
             @endcan
-            <!--/==/ End of General Management Of Property Examination -->
+            <!--/==/ End of General Management Of PreferentialTariff Examination -->
 
             <!-- General Management Of Warehouses -->
             @can('warehouse_view')
@@ -497,17 +506,20 @@
                             <!-- Current Assurance -->
                             <li class="nav-sub-item {{ request()->is('admin/warehouse/assurances') || request()->is('admin/warehouse/assurances/*') ? 'active' : '' }}">
                                 <a class="nav-sub-link"
-                                   href="{{ route('admin.warehouse.assurances.index') }}">@lang('admin.sidebar.onGoing') ({{ count(\App\Models\Warehouse\Assurance::all()->where('status', 1)) }})</a>
+                                   href="{{ route('admin.warehouse.assurances.index') }}">@lang('admin.sidebar.onGoing')
+                                    ({{ count(\App\Models\Warehouse\Assurance::all()->where('status', 1)) }})</a>
                             </li>
                             <!-- Returned Assurance -->
                             <li class="nav-sub-item {{ request()->is('admin/warehouse/returned-assurances') ? 'active' : '' }}">
                                 <a class="nav-sub-link"
-                                   href="{{ route('admin.warehouse.assurances.returned') }}">@lang('admin.sidebar.returned') ({{ count(\App\Models\Warehouse\Assurance::all()->where('status', 2)) }})</a>
+                                   href="{{ route('admin.warehouse.assurances.returned') }}">@lang('admin.sidebar.returned')
+                                    ({{ count(\App\Models\Warehouse\Assurance::all()->where('status', 2)) }})</a>
                             </li>
                             <!-- Absolute Assurance -->
                             <li class="nav-sub-item {{ request()->is('admin/warehouse/absolute-assurances') ? 'active' : '' }}">
                                 <a class="nav-sub-link"
-                                   href="{{ route('admin.warehouse.assurances.absolute') }}">@lang('admin.sidebar.absolute') ({{ count(\App\Models\Warehouse\Assurance::all()->where('status', 3)) }})</a>
+                                   href="{{ route('admin.warehouse.assurances.absolute') }}">@lang('admin.sidebar.absolute')
+                                    ({{ count(\App\Models\Warehouse\Assurance::all()->where('status', 3)) }})</a>
                             </li>
                         </ul>
                     </li>

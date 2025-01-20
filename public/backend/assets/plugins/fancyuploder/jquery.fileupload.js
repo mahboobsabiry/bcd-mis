@@ -171,7 +171,7 @@
 
             // Additional form data to be sent along with the file uploads can be set
             // using this option, which accepts an array of objects with name and
-            // value properties, a function returning such an array, a FormData
+            // value preferential_tariffs, a function returning such an array, a FormData
             // object (for XHR file uploads), or a simple object.
             // The form of the first fileInput is given as parameter to the function:
             formData: function (form) {
@@ -408,7 +408,7 @@
             if (xhr.upload) {
                 $(xhr.upload).bind('progress', function (e) {
                     var oe = e.originalEvent;
-                    // Make sure the progress event properties get copied over:
+                    // Make sure the progress event preferential_tariffs get copied over:
                     e.lengthComputable = oe.lengthComputable;
                     e.loaded = oe.loaded;
                     e.total = oe.total;
@@ -1385,7 +1385,7 @@
 
         // This method is exposed to the widget API and allows to query
         // the widget upload progress.
-        // It returns an object with loaded, total and bitrate properties
+        // It returns an object with loaded, total and bitrate preferential_tariffs
         // for the running uploads:
         progress: function () {
             return this._progress;

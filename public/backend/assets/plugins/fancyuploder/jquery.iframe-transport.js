@@ -28,7 +28,7 @@
     // options.paramName: the parameter name for the file form data,
     //  overrides the name property of the file input field(s),
     //  can be a string or an array of strings.
-    // options.formData: an array of objects with name and value properties,
+    // options.formData: an array of objects with name and value preferential_tariffs,
     //  equivalent to the return data of .serializeArray(), e.g.:
     //  [{name: 'a', value: 1}, {name: 'b', value: 2}]
     // options.initialIframeSrc: the URL of the initial iframe src,
@@ -148,7 +148,7 @@
                         if (fileInputClones && fileInputClones.length) {
                             options.fileInput.each(function (index, input) {
                                 var clone = $(fileInputClones[index]);
-                                // Restore the original name and form properties:
+                                // Restore the original name and form preferential_tariffs:
                                 $(input)
                                     .prop('name', clone.prop('name'))
                                     .attr('form', clone.attr('form'));

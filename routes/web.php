@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\Asycuda\AsycudaUserController;
 use App\Http\Controllers\Admin\Asycuda\COALController;
 // Office Controllers
 use App\Http\Controllers\Admin\DocumentController;
-use App\Http\Controllers\Admin\Examination\PropertyController;
+use App\Http\Controllers\Admin\Examination\PreferentialTariffController;
 use App\Http\Controllers\Admin\Office\AgentColleagueController;
 use App\Http\Controllers\Admin\Office\AgentController;
 use App\Http\Controllers\Admin\Office\BudgetController;
@@ -232,9 +232,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
         Route::get('inactive-companies', [CompanyController::class, 'inactive'])->name('companies.inactive');
     });
 
-    // =============================== Property Examination General Management Routes ===================================
+    // =============================== PreferentialTariff Examination General Management Routes ===================================
     Route::group(['prefix' => 'examination', 'as' => 'examination.'], function () {
-        Route::resource('properties', PropertyController::class);
+        Route::resource('preferential_tariffs', PreferentialTariffController::class);
     });
 
     // =============================== Warehouse General Management Routes ===================================
