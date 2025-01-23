@@ -76,7 +76,7 @@
                             <a class="btn ripple btn-info btn-sm"
                                href="{{ route('admin.examination.preferential_tariffs.renewal', $tariff->id) }}">
                                 @lang('global.renewal')
-                                <i class="fab fa-refresh"></i>
+                                <i class="fe fe-refresh-cw"></i>
                             </a>
                         </div>
                     @endcan
