@@ -115,7 +115,7 @@
                     <!-- Card Body -->
                     <div class="card-body">
                         <!-- User Information Details -->
-                        <div class="p-2 bd">
+                        <div class="p-2">
                             <!-- Personal Information Table -->
                             <div class="table-responsive ">
                                 <table class="table row table-borderless">
@@ -182,9 +182,11 @@
                                         <td>
                                             <div class="main-profile-overview widget-user-image text-center">
                                                 <div class="main-img-user">
-                                                    <a href="{{ asset('storage/agents/signatures/' . $agent->signature) ?? asset('assets/images/avatar-default.jpeg') }}" target="_blank">
-                                                        <img alt="signature" src="{{ asset('storage/agents/signatures/' . $agent->signature) ?? asset('assets/images/avatar-default.jpeg') }}">
-                                                    </a>
+                                                    @if($agent->signature)
+                                                        <a href="{{ asset('storage/agents/signatures/' . $agent->signature) ?? asset('assets/images/avatar-default.jpeg') }}" target="_blank">
+                                                            <img alt="signature" src="{{ asset('storage/agents/signatures/' . $agent->signature) ?? asset('assets/images/avatar-default.jpeg') }}">
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>

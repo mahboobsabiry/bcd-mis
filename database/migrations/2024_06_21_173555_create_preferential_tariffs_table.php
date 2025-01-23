@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('doc_date');
             $table->date('start_date');
             $table->date('end_date');
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(0);
             $table->text('info')->nullable();
             $table->timestamps();
         });

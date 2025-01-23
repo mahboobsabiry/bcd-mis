@@ -235,6 +235,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     // =============================== PreferentialTariff Examination General Management Routes ===================================
     Route::group(['prefix' => 'examination', 'as' => 'examination.'], function () {
         Route::resource('preferential_tariffs', PreferentialTariffController::class);
+        // Harvesting
+        Route::get('harvesting-pts', [PreferentialTariffController::class, 'harvesting_pts'])->name('preferential_tariffs.harvesting_pts');
+        // Harvested
+        Route::get('harvested-pts', [PreferentialTariffController::class, 'harvested_pts'])->name('preferential_tariffs.harvested_pts');
     });
 
     // =============================== Warehouse General Management Routes ===================================

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('hs_code');
             $table->bigInteger('total_packages');
             $table->double('weight');
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(0);
             $table->text('info')->nullable();
             $table->timestamps();
         });

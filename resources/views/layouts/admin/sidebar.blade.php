@@ -466,7 +466,9 @@
                 <li class="nav-label">@lang('admin.sidebar.exPropGenMgmt')</li>
                 @can('examination_pt_view')
                     <li class="nav-item {{ request()->is('admin/examination/preferential_tariffs') ||
-                        request()->is('admin/examination/preferential_tariffs/*') ? 'active show' : '' }}">
+                        request()->is('admin/examination/preferential_tariffs/*') ||
+                        request()->is('admin/examination/harvesting-pts') ||
+                        request()->is('admin/examination/harvested-pts/*') ? 'active show' : '' }}">
                         <a class="nav-link with-sub" href="javascript:void(0)">
                             <i class="fa fa-file-alt"></i>
                             <span class="sidemenu-label">@lang('admin.sidebar.preferredTarrif')</span>
@@ -474,13 +476,26 @@
                         </a>
 
                         <ul class="nav-sub">
-                            <!-- Properties -->
+                            <!-- Preferential Tariffs -->
                             <li class="nav-sub-item {{ request()->is('admin/examination/preferential_tariffs') ||
                                 request()->is('admin/examination/preferential_tariffs/*') ? 'active' : '' }}">
                                 <a class="nav-sub-link"
                                    href="{{ route('admin.examination.preferential_tariffs.index') }}">@lang('admin.sidebar.propertyEstate')
-                                    ({{ count(\App\Models\Examination\PreferentialTariff::all()->where('status', 1)) }}
-                                    )</a>
+                                    ({{ count(\App\Models\Examination\PreferentialTariff::all()->where('status', 0)) }})</a>
+                            </li>
+
+                            <!-- Harvesting Preferential Tariffs -->
+                            <li class="nav-sub-item {{ request()->is('admin/examination/harvesting-pts') ? 'active' : '' }}">
+                                <a class="nav-sub-link"
+                                   href="{{ route('admin.examination.preferential_tariffs.harvesting_pts') }}">{{ __('در حال برداشت') }}
+                                    ({{ count(\App\Models\Examination\PreferentialTariff::all()->where('status', 1)) }})</a>
+                            </li>
+
+                            <!-- Harvested Preferential Tariffs -->
+                            <li class="nav-sub-item {{ request()->is('admin/examination/harvested-pts') ? 'active' : '' }}">
+                                <a class="nav-sub-link"
+                                   href="{{ route('admin.examination.preferential_tariffs.harvested_pts') }}">{{ __('برداشت شده ها') }}
+                                    ({{ count(\App\Models\Examination\PreferentialTariff::all()->where('status', 2)) }})</a>
                             </li>
                         </ul>
                     </li>

@@ -62,7 +62,7 @@
                                     <div class="col-md-6">
                                         <!-- Company -->
                                         <div class="form-group @error('company_id') has-danger @enderror">
-                                            <p class="mb-2"> شرکت: <span class="tx-danger">*</span></p>
+                                            <p class="mb-2 font-weight-bold"> شرکت: <span class="tx-danger">*</span></p>
                                             <select class="form-control @error('company_id') has-danger @enderror select2" name="company_id">
                                                 @foreach($companies as $company)
                                                     <option value="{{ $company->id }}">{{ $company->tin . ' - ' .$company->name }}</option>
@@ -80,7 +80,7 @@
                                             <div class="col-md-6">
                                                 <!-- Document Number -->
                                                 <div class="form-group @error('doc_number') has-danger @enderror">
-                                                    <p class="mb-2">نمبر مکتوب: <span class="tx-danger">*</span></p>
+                                                    <p class="mb-2 font-weight-bold">نمبر مکتوب: <span class="tx-danger">*</span></p>
                                                     <input type="text" id="doc_number" class="form-control @error('doc_number') form-control-danger @enderror" name="doc_number" value="{{ old('doc_number') }}" required>
 
                                                     @error('doc_number')
@@ -93,7 +93,7 @@
                                             <div class="col-md-6">
                                                 <!-- Document Date -->
                                                 <div class="form-group @error('doc_date') has-danger @enderror">
-                                                    <p class="mb-2">تاریخ مکتوب: <span class="tx-danger">*</span></p>
+                                                    <p class="mb-2 font-weight-bold">تاریخ مکتوب: <span class="tx-danger">*</span></p>
                                                     <input data-jdp type="text" id="doc_date" class="form-control @error('doc_date') form-control-danger @enderror" name="doc_date" value="{{ old('doc_date') }}" required>
 
                                                     @error('doc_date')
@@ -107,7 +107,7 @@
 
                                         <!-- Start Date -->
                                         <div class="form-group @error('start_date') has-danger @enderror">
-                                            <p class="mb-2">از تاریخ: <span class="tx-danger">*</span></p>
+                                            <p class="mb-2 font-weight-bold">از تاریخ: <span class="tx-danger">*</span></p>
                                             <input data-jdp data-jdp-max-date="today" type="text" id="start_date" class="form-control @error('start_date') form-control-danger @enderror" name="start_date" value="{{ old('start_date') }}" required>
 
                                             @error('start_date')
@@ -118,7 +118,7 @@
 
                                         <!-- End Date -->
                                         <div class="form-group @error('end_date') has-danger @enderror">
-                                            <p class="mb-2">الی تاریخ: <span class="tx-danger">*</span></p>
+                                            <p class="mb-2 font-weight-bold">الی تاریخ: <span class="tx-danger">*</span></p>
                                             <input data-jdp type="text" id="end_date" class="form-control @error('end_date') form-control-danger @enderror" name="end_date" value="{{ old('end_date') }}" required>
 
                                             @error('end_date')
@@ -126,12 +126,10 @@
                                             @enderror
                                         </div>
                                         <!--/==/ End of End Date -->
-                                    </div>
 
-                                    <div class="col-md-6">
                                         <!-- File -->
                                         <div class="form-group @error('photo') has-danger @enderror" id="avatar_div">
-                                            <p class="mb-2">اسکن مکتوب:</p>
+                                            <p class="mb-2 font-weight-bold">اسکن مکتوب:</p>
                                             <input type="file" class="dropify" name="photo" accept="image/*" data-height="200" />
                                             @error('photo')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -141,7 +139,7 @@
 
                                         <!-- Extra Info -->
                                         <div class="form-group @error('info') has-danger @enderror">
-                                            <p class="mb-2">@lang('global.extraInfo'): </p>
+                                            <p class="mb-2 font-weight-bold">@lang('global.extraInfo'): </p>
                                             <textarea id="info" class="form-control @error('info') form-control-danger @enderror" name="info">{{ old('info') }}</textarea>
 
                                             @error('info')
@@ -149,6 +147,22 @@
                                             @enderror
                                         </div>
                                         <!--/==/ End of Extra Info -->
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <!-- PT Items -->
+                                        <div class="form-group">
+                                            <label class=" font-weight-bold" for="">{{ __('اجناس') }}: <span class="text-danger">*</span></label>
+                                            <div class="field_wrapper">
+                                                <div class="mb-1">
+                                                    <input type="text" name="good_name[]" value="" placeholder="نام جنس" style="width: 150px;"/>
+                                                    <input type="text" name="hs_code[]" value="" placeholder="کد تعرفه" style="width: 100px;"/>
+                                                    <input type="text" name="total_packages[]" value="" placeholder="مجموع بسته ها" style="width: 100px;"/>
+                                                    <input type="text" name="weight[]" value="" placeholder="وزن" style="width: 100px;"/>
+                                                    <a href="javascript:void(0);" class="add_button btn btn-primary btn-sm" title="Add field">@lang('global.add')</a>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <div class="form-group float-left">
                                             <button class="btn ripple btn-primary rounded-2" type="submit">@lang('global.save')</button>
@@ -186,5 +200,32 @@
 
     <!-- Form-elements js-->
     <script src="{{ asset('backend/assets/js/form-elements.js') }}"></script>
+
+    <!-- Custom Scripts -->
+    <script>
+        var maxField = 100; //Input fields increment limitation
+        var addButton = $('.add_button'); //Add button selector
+        var wrapper = $('.field_wrapper'); //Input field wrapper
+        var fieldHTML = '<div class="mb-1"><input type="text" name="good_name[]" value="" placeholder="نام جنس" style="width: 150px;"/>&nbsp;<input type="text" name="hs_code[]" value="" placeholder="کد تعرفه" style="width: 100px;"/>&nbsp;<input type="text" name="total_packages[]" value="" placeholder="مجموع بسته ها" style="width: 100px;"/>&nbsp;<input type="text" name="weight[]" value="" placeholder="وزن" style="width: 100px;"/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-danger btn-sm">@lang('global.remove')</a></div>'; //New input field html
+        var x = 1; //Initial field counter is 1
+
+        // Once add button is clicked
+        $(addButton).click(function(){
+            //Check maximum number of input fields
+            if(x < maxField){
+                x++; //Increase field counter
+                $(wrapper).append(fieldHTML); //Add field html
+            }else{
+                alert('A maximum of '+maxField+' fields are allowed to be added. ');
+            }
+        });
+
+        // Once remove button is clicked
+        $(wrapper).on('click', '.remove_button', function(e){
+            e.preventDefault();
+            $(this).parent('div').remove(); //Remove field html
+            x--; //Decrease field counter
+        });
+    </script>
 @endsection
 <!--/==/ End of Extra Scripts -->

@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 <!-- Title -->
-@section('title', 'تعرفه ترجیحی - جایداد اموال')
+@section('title', 'تعرفه ترجیحی - جایداد در حال برداشت')
 <!-- Extra Styles -->
 @section('extra_css')
     <!---DataTables css-->
@@ -39,7 +39,7 @@
                     <li class="breadcrumb-item">
                         <a href="{{ route('admin.dashboard') }}">@lang('admin.dashboard.dashboard')</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">تعرفه ترجیحی - جایداد اموال</li>
+                    <li class="breadcrumb-item active" aria-current="page">تعرفه ترجیحی - جایداد در حال برداشت</li>
                 </ol>
             </div>
 
@@ -64,7 +64,7 @@
                 <!-- Table Card -->
                 <div class="card">
                     <div class="card-header tx-15 tx-bold">
-                        مجموع تعرفه ترجیحی جایداد اموال ({{ $tariffs->count() }})
+                        مجموع جایداد در حال برداشت ({{ $tariffs->count() }})
                     </div>
 
                     <div class="card-body">
@@ -82,6 +82,7 @@
                                         <th>تاریخ مکتوب</th>
                                         <th>تعداد اقلام</th>
                                         <th>مقدار مجموعی جنس (Kg)</th>
+                                        <th>مقدار برداشت</th>
                                         <th>مدت اعتبار</th>
                                         <th>@lang('form.status')</th>
                                         <th>تاریخ ثبت</th>
@@ -122,6 +123,7 @@
                                                 @endif)
                                             </td>
                                             <!-- Status -->
+                                            <td>...</td>
                                             <td>
                                                 @if($tariff->status == 0)
                                                     <span class="badge badge-danger">{{ __('برداشت ناشده') }}</span>

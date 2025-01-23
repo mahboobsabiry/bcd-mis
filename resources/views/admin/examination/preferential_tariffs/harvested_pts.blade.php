@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 <!-- Title -->
-@section('title', 'تعرفه ترجیحی - جایداد اموال')
+@section('title', 'تعرفه ترجیحی - جایداد برداشت شده')
 <!-- Extra Styles -->
 @section('extra_css')
     <!---DataTables css-->
@@ -39,7 +39,7 @@
                     <li class="breadcrumb-item">
                         <a href="{{ route('admin.dashboard') }}">@lang('admin.dashboard.dashboard')</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">تعرفه ترجیحی - جایداد اموال</li>
+                    <li class="breadcrumb-item active" aria-current="page">تعرفه ترجیحی - جایداد برداشت شده</li>
                 </ol>
             </div>
 
@@ -64,7 +64,7 @@
                 <!-- Table Card -->
                 <div class="card">
                     <div class="card-header tx-15 tx-bold">
-                        مجموع تعرفه ترجیحی جایداد اموال ({{ $tariffs->count() }})
+                        مجموع جایداد برداشت شده ({{ $tariffs->count() }})
                     </div>
 
                     <div class="card-body">
