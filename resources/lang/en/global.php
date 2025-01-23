@@ -85,6 +85,7 @@ return [
     'profile'   => 'Profile',
     'public'    => 'Public',
     'remove'    => 'Remove',
+    'renewal'   => 'Renewal',
     'report'    => 'Report',
     'reporting' => 'Reporting',
     'reports'   => 'Reports',

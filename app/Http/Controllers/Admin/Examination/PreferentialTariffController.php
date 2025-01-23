@@ -94,8 +94,9 @@ class PreferentialTariffController extends Controller
     /**
      * Edit details of record
      */
-    public function edit(PreferentialTariff $tariff)
+    public function edit($id)
     {
+        $tariff = PreferentialTariff::with('pt_items')->findOrFail($id);
         $companies = Company::all()->where('status', 1);
         return view('admin.examination.preferential_tariffs.edit', compact('tariff', 'companies'));
     }
@@ -103,8 +104,9 @@ class PreferentialTariffController extends Controller
     /**
      * Update DATA
      */
-    public function update(Request $request, PreferentialTariff $tariff)
+    public function update(Request $request, $id)
     {
+        $tariff = PreferentialTariff::with('pt_items')->findOrFail($id);
         $tariff->user_id      = Auth::user()->id;
         $tariff->company_id   = $request->company_id;
         $tariff->doc_number   = $request->doc_number;
@@ -130,8 +132,9 @@ class PreferentialTariffController extends Controller
     /**
      * Delete DATA
      */
-    public function destroy(PreferentialTariff $tariff)
+    public function destroy($id)
     {
+        $tariff = PreferentialTariff::with('pt_items')->findOrFail($id);
         $tariff->delete();
 
         return redirect()->route('admin.examination.preferential_tariffs.index')->with([

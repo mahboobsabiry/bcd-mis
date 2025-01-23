@@ -30,11 +30,6 @@ class PermissionController extends Controller
     {
         $perm = Permission::create($request->all());
 
-        activity('added')
-            ->causedBy(Auth::user())
-            ->performedOn($perm)
-            ->log(trans('messages.permissions.addNewPermMsg'));
-
         $message = trans('messages.permissions.addNewPermMsg');
         return redirect()->route('admin.permissions.index')->with([
             'message'   => $message,
@@ -53,11 +48,6 @@ class PermissionController extends Controller
         // Save Record
         $permission->update($request->all());
 
-        activity('updated')
-            ->causedBy(Auth::user())
-            ->performedOn($permission)
-            ->log(trans('messages.permissions.updatePermMsg'));
-
         $message = trans('messages.permissions.updatePermMsg');
         return redirect()->route('admin.permissions.index')->with([
             'message'   => $message,
@@ -69,11 +59,6 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         $permission->delete();
-
-        activity('deleted')
-            ->causedBy(Auth::user())
-            ->performedOn($permission)
-            ->log(trans('messages.permissions.deletePermMsg'));
 
         $message = trans('messages.permissions.deletePermMsg');
         return redirect()->route('admin.permissions.index')->with([

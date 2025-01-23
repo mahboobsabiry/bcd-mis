@@ -69,6 +69,17 @@
                             </a>
                         </div>
                     @endcan
+
+                    @can('examination_pt_renewal')
+                        <div class="mr-2">
+                            <!-- Renewal -->
+                            <a class="btn ripple btn-info btn-sm"
+                               href="{{ route('admin.examination.preferential_tariffs.renewal', $tariff->id) }}">
+                                @lang('global.renewal')
+                                <i class="fab fa-refresh"></i>
+                            </a>
+                        </div>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -337,7 +348,7 @@
                                             <td>{{ $item->hs_code }}</td>
                                             <td>{{ $item->total_packages }}</td>
                                             <td>{{ $item->weight }}</td>
-                                            <td>0 ({{ $item->weight }}<sup>Kg</sup>)</td>
+                                            <td>0 ({{ $item->weight }}<sup>Kg</sup> باقیمانده)</td>
                                             <td>
                                                 @if($item->status == 0)
                                                     <span class="badge badge-danger">{{ __('برداشت ناشده') }}</span>

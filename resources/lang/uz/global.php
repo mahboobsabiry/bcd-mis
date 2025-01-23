@@ -84,6 +84,7 @@ return [
     'profile'   => 'پروفایل',
     'public'    => 'عمومی',
     'remove'    => 'حذف',
+    'renewal'   => 'تمدید',
     'report'    => 'گزارش',
     'reporting' => 'گزارش گیری',
     'reports'   => 'گزارشات',
