@@ -286,7 +286,7 @@
                                     </div>
                                     <div class="col">
                                         @php
-                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->end_date)->toCarbon();
+                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y/m/d', $tariff->end_date)->toCarbon();
                                             $remaining_days = now()->diffInDays($end_date);
                                         @endphp
                                         @if($remaining_days > 10)
@@ -313,7 +313,16 @@
                 <!-- PT Items Table Card -->
                 <div class="card mb-2">
                     <div class="card-header tx-15 tx-bold">
-                        مجموع اقلام ({{ $tariff->pt_items->count() }})
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="font-weight-bold">مجموع اقلام ({{ $tariff->pt_items->count() }})</h5>
+                            </div>
+                            <div class="col-md-6 text-left">
+                                @can('examination_pt_add_item')
+                                    <a href="javascript:void(0);" class="btn btn-outline-primary">ثبت قلم</a>
+                                @endcan
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card-body">

@@ -37,11 +37,6 @@ class RoleController extends Controller
         $role = Role::create($request->all());
         $role->permissions()->sync($request->input('permissions', []));
 
-        activity('added')
-            ->causedBy(Auth::user())
-            ->performedOn($role)
-            ->log(trans('messages.roles.addNewRoleMsg'));
-
         $message = trans('messages.roles.addNewRoleMsg');
         return redirect()->route('admin.roles.index')->with([
             'message'   => $message,
@@ -68,11 +63,6 @@ class RoleController extends Controller
         $role->update($request->all());
         $role->permissions()->sync($request->input('permissions', []));
 
-        activity('updated')
-            ->causedBy(Auth::user())
-            ->performedOn($role)
-            ->log(trans('messages.roles.updateRoleMsg'));
-
         $message = trans('messages.roles.updateRoleMsg');
         return redirect()->route('admin.roles.index')->with([
             'message'   => $message,
@@ -83,11 +73,6 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
-
-        activity('deleted')
-            ->causedBy(Auth::user())
-            ->performedOn($role)
-            ->log(trans('messages.roles.deleteRoleMsg'));
 
         $message = trans('messages.roles.deleteRoleMsg');
         return redirect()->route('admin.roles.index')->with([

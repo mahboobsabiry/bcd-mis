@@ -188,6 +188,12 @@ class PermissionsTableSeeder extends Seeder
             [
                 'name'      => 'examination_pt_delete'
             ],
+            [
+                'name'      => 'examination_pt_renewal'
+            ],
+            [
+                'name'      => 'examination_pt_add_item'
+            ],
             // ========== Warehouse ==========
             [
                 'name'      => 'warehouse_view'
