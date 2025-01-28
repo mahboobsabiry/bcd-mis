@@ -113,7 +113,7 @@ class PreferentialTariffController extends Controller
         $tariff->doc_date     = $request->doc_date;
         $tariff->start_date   = $request->start_date;
         $tariff->end_date     = $request->end_date;
-        $tariff->info         = $request->info;
+        $tariff->info         = $tariff->info . '<br>' . $request->info;
         $tariff->save();
 
         //  Has File && Save Avatar Image
@@ -141,6 +141,33 @@ class PreferentialTariffController extends Controller
             'message'   => 'موفقانه حذف گردید!',
             'alertType' => 'success'
         ]);
+    }
+
+    // Renewal
+    public function renewal(Request $request, $id)
+    {
+        $tariff = PreferentialTariff::with('pt_items')->findOrFail($id);
+
+        if ($request->isMethod('POST')) {
+            // Validation
+            $request->validate([
+                'end_date'      => 'required',
+                'doc_number'    => 'required',
+                'doc_date'      => 'required'
+            ]);
+
+            $tariff->update([
+                'end_date'  => $request->end_date,
+                'info'      => $tariff->info . '<br> الی تاریخ ' . $request->end_date . ' بر اساس مکتوب نمبر ' . $request->doc_number . ' مورخ ' . $request->doc_date . ' تمدید گردید.'
+            ]);
+
+            return redirect()->route('admin.examination.preferential_tariffs.show', $tariff->id)->with([
+                'message'   => 'موفقانه تمدید گردید.',
+                'alertType' => 'success'
+            ]);
+        }
+
+        return view('admin.examination.preferential_tariffs.renewal', compact('tariff'));
     }
 
     // Harvesting PT

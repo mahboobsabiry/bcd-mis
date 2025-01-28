@@ -206,16 +206,6 @@
                                     </div>
                                     <div class="col">{{ $tariff->doc_date }}</div>
                                 </div>
-
-                                <!-- Description -->
-                                <div class="row">
-                                    <div class="col-5 col-sm-4">
-                                        <p class="font-weight-bold mb-1">معلومات اضافی:</p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="fst-italic text-400 mb-1">{{ $tariff->info ?? '--' }}</p>
-                                    </div>
-                                </div>
                             </div>
                             <!--/==/ End of General Information -->
 
@@ -304,12 +294,17 @@
                                         @else
                                             <span class="text-danger">{{ $remaining_days }} روز</span>
                                             &nbsp;&nbsp;&nbsp;
-                                            <span class="fas fa-dollar-sign fa-pulse text-danger"></span>
+                                            <span class="fas fa-circle fa-pulse text-danger"></span>
                                         @endif
                                     </div>
                                 </div>
                             </div>
                             <!--/==/ End of Assurance Information -->
+                        </div>
+
+                        <div class="bd p-2 bg-white">
+                            <h5 class="font-weight-bold">@lang('global.extraInfo')</h5>
+                            <p>{!! $tariff->info !!}</p>
                         </div>
                     </div>
                 </div>
