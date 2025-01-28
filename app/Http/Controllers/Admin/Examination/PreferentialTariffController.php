@@ -87,7 +87,7 @@ class PreferentialTariffController extends Controller
      */
     public function show($id)
     {
-        $tariff = PreferentialTariff::with('pt_items')->where('id', $id)->get();
+        $tariff = PreferentialTariff::with('pt_items')->findOrFail($id);
         return view('admin.examination.preferential_tariffs.show', compact('tariff'));
     }
 
