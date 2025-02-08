@@ -423,8 +423,8 @@
                                                 <img src="{{ $resume->image ?? asset('assets/images/id-card-default.png') }}" alt="{{ $resume->asy_user->employee->name }}" width="80">
                                             </a>
                                         </td>
-                                        <td>{{ $resume->info }}</td>
                                         <td>{{ \Morilog\Jalali\CalendarUtils::strftime('Y-m-d', strtotime($resume->created_at)) }}</td>
+                                        <td>{{ $resume->info }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

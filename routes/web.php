@@ -235,6 +235,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     // =============================== PreferentialTariff Examination General Management Routes ===================================
     Route::group(['prefix' => 'examination', 'as' => 'examination.'], function () {
         Route::resource('preferential_tariffs', PreferentialTariffController::class);
+        // Harvest
+        Route::post('new-pt-item/{id}', [PreferentialTariffController::class, 'new_item'])->name('preferential_tariffs.new_item');
         // Renewal
         Route::match(['get', 'post'], 'renewal-pt/{id}', [PreferentialTariffController::class, 'renewal'])->name('preferential_tariffs.renewal');
         // Harvesting
@@ -243,6 +245,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
         Route::get('harvested-pts', [PreferentialTariffController::class, 'harvested_pts'])->name('preferential_tariffs.harvested_pts');
         // Harvest
         Route::match(['get', 'post'], 'harvest-pt/{id}', [PreferentialTariffController::class, 'harvest'])->name('preferential_tariffs.harvest');
+        Route::get('harvest/select-item', [PreferentialTariffController::class, 'select_item'])->name('preferential_tariffs.select_item');
     });
 
     // =============================== Warehouse General Management Routes ===================================

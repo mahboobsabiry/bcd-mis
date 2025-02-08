@@ -24,4 +24,16 @@ class Harvest extends Model
     {
         return $this->hasMany(HarvestItem::class);
     }
+
+    // Code
+    public static function code()
+    {
+        $latest_harvest = Harvest::latest()->first();
+        if ($latest_harvest) {
+            $code = 'PHC-' . $latest_harvest->id;
+        } else {
+            $code = 'PHC-1';
+        }
+        return $code;
+    }
 }

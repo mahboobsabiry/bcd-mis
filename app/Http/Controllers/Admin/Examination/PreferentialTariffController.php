@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Examination;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PreferentialTariffRequest;
+use App\Models\Examination\Harvest;
+use App\Models\Examination\HarvestItem;
 use App\Models\Examination\PreferentialTariff;
 use App\Models\Examination\PTItems;
 use App\Models\Office\Company;
@@ -186,15 +188,107 @@ class PreferentialTariffController extends Controller
         return view('admin.examination.preferential_tariffs.harvested_pts', compact('tariffs'));
     }
 
+    // Add New Item
+    public function new_item(Request $request, $id)
+    {
+        $tariff = PreferentialTariff::findOrFail($id);
+
+        $request->validate([
+            'good_name' => 'required',
+            'hs_code'   => 'required|numeric',
+            'total_packages'    => 'required|numeric',
+            'weight'            => 'required|numeric'
+        ]);
+
+        $item = new PTItems();
+        $item->pt_id    = $tariff->id;
+        $item->good_name    = $request->good_name;
+        $item->hs_code    = $request->hs_code;
+        $item->total_packages    = $request->total_packages;
+        $item->weight    = $request->weight;
+        $item->save();
+
+        return back()->with([
+            'message'   => 'قلم جدید ثبت گردید.',
+            'alertType' => 'success'
+        ]);
+    }
+
     // Harvest
     public function harvest(Request $request, $id)
     {
-        $pt = PreferentialTariff::with('pt_items')->findOrFail($id);
+        $tariff = PreferentialTariff::with('pt_items')->findOrFail($id);
+
+        if ($tariff->harvests()) {
+            if ($tariff->pt_items->sum('weight') <= $tariff->harvests->sum('weight')) {
+                return back()->with([
+                    'message'   => 'هیچ محموله‌ای برای برداشت وجود ندارد.',
+                    'alertType' => 'danger'
+                ]);
+            }
+        }
+
         if ($request->isMethod('POST')) {
+            $data = $request->all();
+
+            $harvest = new Harvest();
+            $harvest->pt_id = $tariff->id;
+            $harvest->code  = Harvest::code();
+            $harvest->info  = $tariff->info;
+            $harvest->save();
+
             $request->validate([
-                'code'      => 'required',
+                'good_name[]'       => 'required',
+                'hs_code[]'         => 'required|numeric',
+                'total_packages[]'  => 'required|numeric',
+                'weight[]'          => 'required|numeric',
+            ]);
+            foreach ($data['good_name'] as $key=>$item) {
+                $h_item = new HarvestItem();
+                $h_item->harvest_id = $harvest->id;
+                $h_item->good_name  = $data['good_name'][$key];
+                $h_item->hs_code    = $data['hs_code'][$key];
+                $h_item->total_packages = $data['total_packages'][$key];
+                $h_item->weight         = $data['weight'][$key];
+                $h_item->save();
+            }
+
+            return redirect()->route('admin.examination.preferential_tariffs.show', $tariff->id)->with([
+                'message'   => 'برداشت انجام شد!',
+                'alertType' => 'danger'
             ]);
         }
-        return view('admin.examination.preferential_tariffs.harvest', compact('pt'));
+
+        return view('admin.examination.preferential_tariffs.harvest', compact('tariff'));
+    }
+
+    // Select Item
+    public function select_item(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            // Query the database to get the relevant data
+            $item = PTItems::where('good_name', $data['item_good_name'])->first();
+
+            if ($item) {
+                // Assuming 'employee_name' is the field you want to retrieve
+                $pt_good_name = $item->good_name;
+                $pt_hs_code = $item->hs_code;
+                $pt_total_packages = $item->total_packages;
+                $pt_weight = $item->weight;
+
+                // Return the data as a JSON response
+                return response()->json([
+                    'pt_good_name' => $pt_good_name,
+                    'pt_hs_code' => $pt_hs_code,
+                    'pt_total_packages' => $pt_total_packages,
+                    'pt_weight' => $pt_weight
+                ]);
+            } else {
+                // Handle the case when the aircraft ID is not found
+                return response()->json(['error' => 'Aircraft not found'], 404);
+            }
+        }
     }
 }

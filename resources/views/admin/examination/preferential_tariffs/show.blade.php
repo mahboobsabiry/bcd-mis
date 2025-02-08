@@ -286,7 +286,7 @@
                                     </div>
                                     <div class="col">
                                         @php
-                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y/m/d', $tariff->end_date)->toCarbon();
+                                            $end_date = \Morilog\Jalali\Jalalian::fromFormat('Y-m-d', $tariff->end_date)->toCarbon();
                                             $remaining_days = now()->diffInDays($end_date);
                                         @endphp
                                         @if($remaining_days > 10)
@@ -319,7 +319,16 @@
                             </div>
                             <div class="col-md-6 text-left">
                                 @can('examination_pt_add_item')
-                                    <a href="javascript:void(0);" class="btn btn-outline-primary">ثبت قلم</a>
+                                    <!-- NEW -->
+                                    <a class="modal-effect btn ripple btn-primary"
+                                       data-effect="effect-sign" data-toggle="modal"
+                                       href="#new_item{{ $tariff->id }}"
+                                       title="@lang('global.new')">
+                                        @lang('global.new')
+                                        <i class="fe fe-plus-circle"></i>
+                                    </a>
+
+                                    @include('admin.examination.preferential_tariffs.inc.new_item')
                                 @endcan
                             </div>
                         </div>
@@ -375,17 +384,15 @@
                 </div>
                 <!--/==/ End of PT Items Table Card -->
 
-                <!-- PT Items Table Card -->
+                <!-- PT Harvests Table Card -->
                 <div class="card mb-2">
                     <div class="card-header tx-15 tx-bold">
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="font-weight-bold">مجموع اقلام ({{ $tariff->pt_items->count() }})</h5>
+                                <h5 class="font-weight-bold">مجموع برداشت ها ({{ $tariff->harvests->count() }})</h5>
                             </div>
                             <div class="col-md-6 text-left">
-                                @can('examination_pt_add_item')
-                                    <a href="javascript:void(0);" class="btn btn-outline-primary">ثبت قلم</a>
-                                @endcan
+                                <a href="{{ route('admin.examination.preferential_tariffs.harvest', $tariff->id) }}" class="btn btn-primary">برداشت</a>
                             </div>
                         </div>
                     </div>
@@ -399,35 +406,25 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>نام جنس</th>
-                                        <th>کد تعرفه (HS Code)</th>
-                                        <th>مقدار مجموعی بسته</th>
-                                        <th>وزن</th>
-                                        <th>برداشت</th>
+                                        <th>کد</th>
+                                        <th>تعداد اقلام برداشت شده</th>
+                                        <th>مقدار برداشت شده</th>
+                                        <th>وزن مجموعی برداشت شده</th>
                                         <th>@lang('form.status')</th>
                                         <th>تاریخ ثبت</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
-                                    @foreach($tariff->pt_items as $item)
+                                    @foreach($tariff->harvests as $harvest)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->good_name }}</td>
-                                            <td>{{ $item->hs_code }}</td>
-                                            <td>{{ $item->total_packages }}</td>
-                                            <td>{{ $item->weight }}</td>
-                                            <td>0 ({{ $item->weight }}<sup>Kg</sup> باقیمانده)</td>
-                                            <td>
-                                                @if($item->status == 0)
-                                                    <span class="badge badge-danger">{{ __('برداشت ناشده') }}</span>
-                                                @elseif($item->status == 1)
-                                                    <span class="badge badge-warning">{{ __('در حال برداشت') }}</span>
-                                                @else
-                                                    <span class="badge badge-success">{{ __('برداشت شده') }}</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ \Morilog\Jalali\CalendarUtils::strftime('Y-F-d', strtotime($tariff->created_at)) }}</td>
+                                            <td>{{ $harvest->code }}</td>
+                                            <td>{{ $harvest->items->count() }}</td>
+                                            <td>{{ $harvest->items->sum('total_packages') }}</td>
+                                            <td>{{ $harvest->weight }}</td>
+                                            <td>{{ $harvest->status == 1 ? 'فعال' : 'غیرفعال' }}</td>
+                                            <td>{{ \Morilog\Jalali\CalendarUtils::strftime('Y-F-d', strtotime($harvest->created_at)) }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -438,7 +435,7 @@
                         <!--/==/ End of All Record -->
                     </div>
                 </div>
-                <!--/==/ End of PT Items Table Card -->
+                <!--/==/ End of PT Harvests Table Card -->
             </div>
         </div>
         <!--/==/ End of Row Content -->
