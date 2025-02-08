@@ -185,4 +185,10 @@ class PreferentialTariffController extends Controller
 
         return view('admin.examination.preferential_tariffs.harvested_pts', compact('tariffs'));
     }
+
+    // Harvest
+    public function harvest(Request $request, $id)
+    {
+        //
+    }
 }

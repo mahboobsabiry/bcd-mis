@@ -46,4 +46,10 @@ class PreferentialTariff extends Model
     {
         return $this->hasMany(PTItems::class, 'pt_id', 'id');
     }
+
+    // Harvests
+    public function harvests() : HasMany
+    {
+        return $this->hasMany(Harvest::class, 'pt_id', 'id');
+    }
 }
