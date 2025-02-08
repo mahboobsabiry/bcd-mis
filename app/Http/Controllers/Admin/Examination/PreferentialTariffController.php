@@ -189,6 +189,12 @@ class PreferentialTariffController extends Controller
     // Harvest
     public function harvest(Request $request, $id)
     {
-        //
+        $pt = PreferentialTariff::with('pt_items')->findOrFail($id);
+        if ($request->isMethod('POST')) {
+            $request->validate([
+                'code'      => 'required',
+            ]);
+        }
+        return view('admin.examination.preferential_tariffs.harvest', compact('pt'));
     }
 }

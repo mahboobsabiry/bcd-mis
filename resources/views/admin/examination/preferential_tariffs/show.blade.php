@@ -374,6 +374,71 @@
                     </div>
                 </div>
                 <!--/==/ End of PT Items Table Card -->
+
+                <!-- PT Items Table Card -->
+                <div class="card mb-2">
+                    <div class="card-header tx-15 tx-bold">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="font-weight-bold">مجموع اقلام ({{ $tariff->pt_items->count() }})</h5>
+                            </div>
+                            <div class="col-md-6 text-left">
+                                @can('examination_pt_add_item')
+                                    <a href="javascript:void(0);" class="btn btn-outline-primary">ثبت قلم</a>
+                                @endcan
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- All -->
+                        <div class="">
+                            <!-- Table -->
+                            <div class="table-responsive mt-2">
+                                <table class="table table-bordered dataTable export-table border-top key-buttons display text-nowrap w-100">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>نام جنس</th>
+                                        <th>کد تعرفه (HS Code)</th>
+                                        <th>مقدار مجموعی بسته</th>
+                                        <th>وزن</th>
+                                        <th>برداشت</th>
+                                        <th>@lang('form.status')</th>
+                                        <th>تاریخ ثبت</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    @foreach($tariff->pt_items as $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->good_name }}</td>
+                                            <td>{{ $item->hs_code }}</td>
+                                            <td>{{ $item->total_packages }}</td>
+                                            <td>{{ $item->weight }}</td>
+                                            <td>0 ({{ $item->weight }}<sup>Kg</sup> باقیمانده)</td>
+                                            <td>
+                                                @if($item->status == 0)
+                                                    <span class="badge badge-danger">{{ __('برداشت ناشده') }}</span>
+                                                @elseif($item->status == 1)
+                                                    <span class="badge badge-warning">{{ __('در حال برداشت') }}</span>
+                                                @else
+                                                    <span class="badge badge-success">{{ __('برداشت شده') }}</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ \Morilog\Jalali\CalendarUtils::strftime('Y-F-d', strtotime($tariff->created_at)) }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--/==/ End of Table -->
+                        </div>
+                        <!--/==/ End of All Record -->
+                    </div>
+                </div>
+                <!--/==/ End of PT Items Table Card -->
             </div>
         </div>
         <!--/==/ End of Row Content -->

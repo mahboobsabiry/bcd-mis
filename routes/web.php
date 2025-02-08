@@ -242,7 +242,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
         // Harvested
         Route::get('harvested-pts', [PreferentialTariffController::class, 'harvested_pts'])->name('preferential_tariffs.harvested_pts');
         // Harvest
-        Route::match(['get', 'post'], 'harvest-pt-item/{id}', [PreferentialTariffController::class, 'harvest'])->name('preferential_tariffs.items.harvest');
+        Route::match(['get', 'post'], 'harvest-pt/{id}', [PreferentialTariffController::class, 'harvest'])->name('preferential_tariffs.harvest');
     });
 
     // =============================== Warehouse General Management Routes ===================================
