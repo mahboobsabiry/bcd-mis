@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('asy_user_id');
             $table->string('position');
             $table->boolean('position_type')->default(0);
-            $table->string('doc_number');
+            $table->string('doc_number')->nullable();
             $table->string('doc_date')->nullable();
             $table->string('username');
             $table->string('password');

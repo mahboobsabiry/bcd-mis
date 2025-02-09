@@ -251,8 +251,8 @@
                                 <div class="col-md-6">
                                     <!-- Document Number -->
                                     <div class="form-group @error('doc_number') has-danger @enderror">
-                                        <p class="mb-2">نمبر مکتوب: <span class="tx-danger">*</span></p>
-                                        <input type="text" id="doc_number" class="form-control @error('doc_number') form-control-danger @enderror" name="doc_number" value="{{ old('doc_number') }}" required>
+                                        <p class="mb-2">نمبر مکتوب:</p>
+                                        <input type="text" id="doc_number" class="form-control @error('doc_number') form-control-danger @enderror" name="doc_number" value="{{ old('doc_number') }}">
 
                                         @error('doc_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -261,8 +261,8 @@
 
                                     <!-- Document Date -->
                                     <div class="form-group @error('doc_date') has-danger @enderror">
-                                        <p class="mb-2">تاریخ مکتوب: <span class="tx-danger">*</span></p>
-                                        <input data-jdp data-jdp-max-date="today" type="text" id="doc_date" class="form-control @error('doc_date') form-control-danger @enderror" name="doc_date" value="{{ old('doc_date') }}" required>
+                                        <p class="mb-2">تاریخ مکتوب:</p>
+                                        <input data-jdp data-jdp-max-date="today" type="text" id="doc_date" class="form-control @error('doc_date') form-control-danger @enderror" name="doc_date" value="{{ old('doc_date') }}">
 
                                         @error('doc_date')
                                         <div class="invalid-feedback">{{ $message }}</div>

@@ -169,8 +169,8 @@ class AsycudaUserController extends Controller
             'position_type' => 'required',
             'user_roles'    => 'required',
             'user_status'   => 'required',
-            'doc_number'    => 'required',
-            'doc_date'      => 'required',
+            'doc_number'    => 'nullable',
+            'doc_date'      => 'nullable',
             'username'      => 'required',
             'password'      => 'required',
             'info'          => 'nullable'
