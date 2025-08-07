@@ -194,16 +194,10 @@ class DocumentController extends Controller
         // Check if Authenticated Employee is On Duty or not
         if (Auth::user()->employee->on_duty == 1) {
             // Get all documents where receiver is employee or not
-            $documents = Document::where(function ($query) {
-                $cc = Document::find('cc');
-                $query->where('receiver', Auth::user()->employee->duty_position)->orWhere('cc', strpos(Auth::user()->employee->duty_position, $cc));
-            })->get();
+            $documents = Document::where('receiver', Auth::user()->employee->duty_position)->orWhere('cc', 'LIKE', '%' . Auth::user()->employee->duty_position . '%')->get();
         } else {
-            $documents = Document::where(function ($query) {
-                $cc = Document::find('cc');
-                $auth_user_pos = auth()->user()->employee->position;
-                $query->where('receiver', $auth_user_pos->title)->orWhere('cc', strpos($auth_user_pos->title, $cc));
-            })->get();
+            $auth_user_pos = auth()->user()->employee->position;
+            $documents = Document::where('receiver', $auth_user_pos->title)->orWhere('cc', 'LIKE', '%' . $auth_user_pos->title . '%')->get();
         }
 
         return view('admin.documents.received', compact('position', 'documents'));
