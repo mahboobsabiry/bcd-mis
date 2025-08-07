@@ -187,13 +187,12 @@
                                             <!-- Receiver -->
                                             <td>
                                                 @php $receiver_pos = \App\Models\Office\Position::where('title', $document->receiver)->first(); @endphp
-                                                <a href="{{ route('admin.office.positions.show', $receiver_pos->id) }}">{{ $document->receiver ?? '' }}</a>
+                                                <a href="{{ route('admin.office.positions.show', $receiver_pos->id) }}" class="{{ $document->receiver == auth()->user()->employee->position->title ? 'font-weight-bold text-success' : '' }}">{{ $document->receiver ?? '' }}</a>
                                             </td>
                                             <!-- CC -->
                                             <td>
-                                                @php $search_cc = strpos($document->position->title, \App\Models\Document::find('cc')) @endphp
                                                 @foreach(explode(', ', $document->cc) as $cc)
-                                                    - <span class="{{ $cc == $document->position->title ? 'tx-bold' : '' }}">{{ $cc }}</span>
+                                                    - <span class="{{ $cc == auth()->user()->employee->position->title ? 'font-weight-bold text-success' : '' }}">{{ $cc }}</span>
                                                 @endforeach
                                             </td>
                                             <!-- Subject -->

@@ -70,8 +70,7 @@
                                 <a class="nav-sub-link" href="{{ route('admin.documents.index') }}">
                                     @lang('admin.sidebar.sentDocs')
                                     @if($auth_user_pos)
-                                        ({{ count(\App\Models\Document::all()->where('position_id', $auth_user_pos->id)) }}
-                                        )
+                                        ({{ count(\App\Models\Document::all()->where('position_id', $auth_user_pos->id)) }})
                                     @endif
                                 </a>
                             </li>
@@ -79,20 +78,12 @@
                             <!-- Received Documents -->
                             <li class="nav-sub-item {{ request()->is('admin/received-documents') ? 'active' : '' }}">
                                 <a class="nav-sub-link" href="{{ route('admin.documents.received') }}">
-                                    @php $pos_docs = \App\Models\Document::where('position_id', auth()->user()->employee->position->id)->select('cc')->get(); @endphp
                                     @lang('admin.sidebar.receivedDocs')
-                                    (<?php
-                                         // Check if Authenticated Employee is On Duty or not
-                                         if (\Illuminate\Support\Facades\Auth::user()->employee->on_duty == 1) {
-                                             // Count all Received Documents
-                                             \App\Models\Document::all()->where('receiver', \Illuminate\Support\Facades\Auth::user()->employee->duty_position)->count();
-                                             +\App\Models\Document::all()->where('cc', strpos(\Illuminate\Support\Facades\Auth::user()->employee->duty_position, $pos_docs))->count();
-                                         } else {
-                                             // Count all Received Documents
-                                             \App\Models\Document::all()->where('receiver', $auth_user_pos->title)->count();
-                                             +\App\Models\Document::all()->where('cc', str()->contains(\App\Models\Document::all()->pluck('cc'), $auth_user_pos->title))->count();
-                                         }
-                                         ?>)
+                                    @if(auth()->user()->employee->on_duty == 1)
+                                        ({{ \App\Models\Document::where('receiver', auth()->user()->employee->duty_position)->orWhere('cc', 'LIKE', '%' . auth()->user()->employee->duty_position . '%')->count() }})
+                                    @else
+                                        ({{ \App\Models\Document::where('receiver', auth()->user()->employee->position->title)->orWhere('cc', 'LIKE', '%' . auth()->user()->employee->position->title . '%')->count() }})
+                                    @endif
                                 </a>
                             </li>
                         </ul>

@@ -107,7 +107,7 @@
                             <p class="pro-user-desc text-muted mb-1">{{ $document->position->title }}</p>
                             @if($document->position->position_number == 2 || $document->position->position_number == 3)
                             @else
-                                <p class="pro-user-desc text-primary mb-1">({{ $document->position->place ?? '' }})</p>
+                                <p class="pro-user-desc text-primary mb-1">({{ $document->position->place->name ?? '' }})</p>
                             @endif
                             <!-- Position Star -->
                             <p class="user-info-rating">
