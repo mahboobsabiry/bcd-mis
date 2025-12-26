@@ -1,38 +1,200 @@
 @extends('layouts.admin.master')
-<!-- Title -->
+
 @section('title', trans('admin.sidebar.positions'))
-<!-- Extra Styles -->
+
 @section('extra_css')
     <!---DataTables css-->
     <link href="{{ asset('backend/assets/plugins/datatable/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/assets/plugins/datatable/responsivebootstrap4.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/assets/plugins/datatable/fileexport/buttons.bootstrap4.min.css') }}" rel="stylesheet">
-
-    <!-- Select 2 -->
-    <link href="{{ asset('backend/assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
-    <!--Sumoselect css-->
-    <link href="{{ asset('backend/assets/plugins/sumoselect/sumoselect.css') }}" rel="stylesheet">
-
-    @if(app()->getLocale() == 'en')
-        <link href="{{ asset('assets/css/treeview.css') }}" rel="stylesheet">
-    @else
-        <link href="{{ asset('assets/css/treeview.css') }}" rel="stylesheet">
-    @endif
-
     <style>
-        table thead tr .tblBorder {
-            border: 1px solid #ddd;
+        :root {
+            --primary-color: #4361ee;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        .position-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .stats-card {
+            padding: 1rem;
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stats-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-tabs-custom {
+            border-bottom: 2px solid #e3e6f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs-custom .nav-link {
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: #6c757d;
+            margin-right: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .nav-tabs-custom .nav-link.active {
+            color: var(--primary-color);
+            background-color: #f8f9fc;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .filter-section {
+            background-color: #f8f9fc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e3e6f0;
+        }
+
+        .filter-btn-group .btn {
+            border-radius: 20px;
+            margin: 0 0.25rem;
+            padding: 0.375rem 1rem;
+            transition: all 0.3s;
+        }
+
+        .filter-btn-group .btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        .search-input {
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e3e6f0;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .position-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .progress-thin {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+        }
+
+        .code-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            max-width: 150px;
+        }
+
+        .code-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .code-dot.filled {
+            background-color: var(--success-color);
+        }
+
+        .code-dot.empty {
+            background-color: var(--danger-color);
+        }
+
+        .code-dot:hover {
+            transform: scale(1.3);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .tree-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Custom DataTable Styles */
+        #positionsTable_wrapper {
+            padding: 0;
+        }
+
+        #positionsTable {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        #positionsTable thead th {
+            background-color: #f8f9fc;
+            border-bottom: 2px solid #e3e6f0;
+            font-weight: 600;
+            color: #495057;
+            padding: 1rem;
+            white-space: nowrap;
+        }
+
+        #positionsTable tbody td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e3e6f0;
+            vertical-align: middle;
+        }
+
+        #positionsTable tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .dataTables_filter input {
+            border-radius: 20px;
+            border: 2px solid #e3e6f0;
+            padding: 0.5rem 1rem;
+        }
+
+        .dataTables_filter input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
         }
     </style>
 @endsection
-<!--/==/ End of Extra Styles -->
 
-<!-- Page Content -->
 @section('content')
     <div class="container-fluid">
         <!-- Page Header -->
         <div class="page-header">
-            <!-- Breadcrumb -->
             <div>
                 <h2 class="main-content-title tx-24 mg-b-5">@lang('admin.sidebar.positions')</h2>
                 <ol class="breadcrumb">
@@ -43,141 +205,356 @@
                 </ol>
             </div>
 
-            <!-- Btn List -->
             <div class="btn btn-list">
-                <!-- Add New -->
                 @can('office_position_create')
-                    <a class="btn ripple btn-primary" href="{{ route('admin.office.positions.create') }}">
-                        <i class="fe fe-plus-circle"></i> @lang('pages.positions.addPosition')
+                    <a class="btn btn-primary" href="{{ route('admin.office.positions.create') }}">
+                        <i class="fas fa-plus-circle mr-1"></i> @lang('pages.positions.addPosition')
                     </a>
                 @endcan
             </div>
         </div>
-        <!--/==/ End of Page Header -->
 
-        <!-- Data Table -->
-        <div class="row">
-            <div class="col-lg-12">
-                <!-- Table Card -->
-                <div class="card custom-card main-content-body-profile">
-                    <!-- Table Title -->
-                    <div class="nav main-nav-line mb-2">
-                        <a class="nav-link active" data-toggle="tab" href="#allPositions">
-                            @lang('pages.positions.allPositions')
-                        </a>
-                        <a class="nav-link" data-toggle="tab" href="#organ">
-                            @lang('pages.positions.organization')
-                        </a>
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <a href="{{ route('admin.office.positions.index') }}" class="text-decoration-none">
+                    <div class="stats-card" style="background: linear-gradient(135deg, var(--primary-color), #6c5ce7);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">کل بست ها</h6>
+                                <div class="stats-number">{{ \App\Models\Office\Position::count() }}</div>
+                            </div>
+                            <i class="fas fa-layer-group fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="{{ route('admin.office.positions.appointment') }}" class="text-decoration-none">
+                    <div class="stats-card" style="background: linear-gradient(135deg, var(--success-color), #20c997);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">بست های پر</h6>
+                                <div class="stats-number">{{ \App\Models\Office\Position::getFullyAppointedCount() }}</div>
+                            </div>
+                            <i class="fas fa-user-check fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="{{ route('admin.office.positions.empty') }}" class="text-decoration-none">
+                    <div class="stats-card" style="background: linear-gradient(135deg, var(--warning-color), #ff922b);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">بست های خالی</h6>
+                                <div class="stats-number">{{ \App\Models\Office\Position::getEmptyPositionsCount() }}</div>
+                            </div>
+                            <i class="fas fa-user-slash fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="?status=uncoded" class="text-decoration-none">
+                    <div class="stats-card" style="background: linear-gradient(135deg, var(--info-color), #3dc7be);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">بدون کد</h6>
+                                <div class="stats-number">{{ \App\Models\Office\Position::doesntHave('codes')->count() }}</div>
+                            </div>
+                            <i class="fas fa-key fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        @include('admin.inc.alerts')
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <form method="GET" action="{{ route('admin.office.positions.index') }}" id="filterForm">
+                <div class="row">
+                    <!-- Search Input -->
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group">
+                            <input type="text"
+                                   name="search"
+                                   class="form-control search-input"
+                                   placeholder="جستجوی بست (عنوان، شماره درجه، توضیحات)"
+                                   value="{{ request('search') }}"
+                                   autocomplete="off">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary" style="border-radius: {{ app()->getlocale() == 'en' ? '0 25px 25px 0' : '25px 0 0 25px' }};">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="card-body tab-content h-100">
-                        <!-- Success Message -->
-                        @include('admin.inc.alerts')
-                        <!-- All Positions -->
-                        <div class="tab-pane active" id="allPositions">
-                            <div class="main-content-label tx-13 mg-b-20">
-                                @lang('pages.positions.allPositions') ({{ count($positions) }}) - تعداد بست ها ({{ \App\Models\Office\Position::all()->sum('num_of_pos') }})
-                            </div>
-                            <!-- Table -->
-                            <div class="table-responsive mt-2">
-                                <table class="table table-bordered dataTable export-table border-top key-buttons display text-nowrap w-100">
+                    <!-- Status Filters -->
+                    <div class="col-md-4 mb-3">
+                        <div class="filter-btn-group">
+                            <span class="mr-2 text-muted small">وضعیت:</span>
+                            <button type="button" class="btn btn-outline-secondary text-white filter-status" data-status="">
+                                همه
+                            </button>
+                            <button type="button" class="btn btn-outline-success filter-status" data-status="full">
+                                پر
+                            </button>
+                            <button type="button" class="btn btn-outline-warning filter-status" data-status="vacant">
+                                خالی
+                            </button>
+                            <button type="button" class="btn btn-outline-info filter-status" data-status="uncoded">
+                                بدون کد
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Level Filters -->
+                    <div class="col-md-3 mb-3">
+                        <div class="filter-btn-group">
+                            <span class="mr-2 text-muted small">درجه:</span>
+                            <button type="button" class="btn btn-outline-secondary text-white filter-level" data-level="">
+                                همه
+                            </button>
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="1">
+                                1
+                            </button>
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="2">
+                                2
+                            </button>
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="3">
+                                3
+                            </button>
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="3">
+                                4+
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden fields for filter submission -->
+                <input type="hidden" name="status" id="statusInput" value="{{ request('status') }}">
+                <input type="hidden" name="level" id="levelInput" value="{{ request('level') }}">
+                <input type="hidden" name="per_page" id="perPageInput" value="{{ request('per_page', 25) }}">
+            </form>
+        </div>
+
+        <!-- Clear Filters Button -->
+        @if(request()->hasAny(['search', 'status', 'level']))
+            <div class="mb-3 text-center">
+                <a href="{{ route('admin.office.positions.index') }}" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-times-circle mr-1"></i> حذف فیلترها
+                </a>
+                <span class="text-muted small mr-3">فیلترهای فعال:
+                @if(request('search'))
+                        <span class="badge badge-info">{{ request('search') }}</span>
+                    @endif
+                    @if(request('status') == 'full')
+                        <span class="badge badge-success">پر</span>
+                    @elseif(request('status') == 'vacant')
+                        <span class="badge badge-warning">خالی</span>
+                    @elseif(request('status') == 'uncoded')
+                        <span class="badge badge-info">بدون کد</span>
+                    @endif
+                    @if(request('level'))
+                        <span class="badge badge-primary">درجه {{ request('level') }}</span>
+                    @endif
+            </span>
+            </div>
+        @endif
+
+        <!-- Main Content -->
+        <div class="row p-2">
+            <div class="col-lg-12">
+                <div class="card position-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0">
+                            <i class="fas fa-briefcase mr-2"></i>مدیریت بست های وظیفوی
+                        </h6>
+
+                        <!-- Export and Refresh -->
+                        <div>
+                            <button class="btn btn-sm btn-outline-success" onclick="exportTableToCSV()">
+                                <i class="fas fa-file-export mr-1"></i> خروجی CSV
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary ml-2" onclick="location.reload()">
+                                <i class="fas fa-sync-alt mr-1"></i> بروزرسانی
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs" id="positionTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="list-tab" data-toggle="tab" href="#listView" role="tab">
+                                    <i class="fas fa-list mr-1"></i>لیست بست ها
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="organ-tab" data-toggle="tab" href="#organ" role="tab">
+                                    <i class="fas fa-sitemap mr-1"></i>ساختار سازمانی
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- List View Tab -->
+                        <div class="tab-pane fade show active" id="listView" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="positionsTable">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>@lang('form.title')</th>
-                                        <th>@lang('pages.positions.underHand')</th>
-                                        <th>کد بست و کارمندان</th>
-                                        <th>نمبر و تعداد بست</th>
+                                        <th width="50">#</th>
+                                        <th>عنوان بست</th>
+                                        <th>کدها</th>
+                                        <th>درجه / تعداد</th>
+                                        <th>پر شده</th>
                                         <th>موقعیت</th>
-                                        <th>@lang('form.extraInfo')</th>
+                                        <th>وضعیت</th>
+                                        <th width="140">عملیات</th>
                                     </tr>
                                     </thead>
-
                                     <tbody>
                                     @foreach($positions as $position)
                                         <tr>
                                             <td>
-                                                {{ $position->id }}
+                                                <span class="badge badge-light border">{{ $position->id }}</span>
                                             </td>
-                                            <td><a href="{{ route('admin.office.positions.show', $position->id ) }}">{{ $position->title }}</a></td>
-
-                                            <!-- Parent Position -->
                                             <td>
-                                                {{ $position->parent->title ?? trans('pages.positions.afCustomsDep') }}
+                                                <strong>{{ $position->title }}</strong>
+                                                @if($position->desc)
+                                                    <div class="text-muted small mt-1">{{ Str::limit($position->desc, 50) }}</div>
+                                                @endif
+                                                <div class="small text-muted">
+                                                    @if($position->parent)
+                                                        <i class="fas fa-level-up-alt mr-1"></i>{{ $position->parent->title }}
+                                                    @endif
+                                                </div>
                                             </td>
+                                            <td>
+                                                <div class="code-dots">
+                                                    @foreach($position->codes->take(20) as $code)
+                                                        <span class="code-dot {{ $code->employee ? 'filled' : 'empty' }}"
+                                                              title="{{ $code->code }}: {{ $code->employee ? $code->employee->name : 'خالی' }}"
+                                                              data-toggle="tooltip">
+                                                    </span>
+                                                    @endforeach
+                                                </div>
+                                                <div class="small text-muted mt-1">
+                                                    {{ $position->codes_count }} کد
+                                                </div>
+                                            </td>
+                                            <td>
+                                            <span class="badge badge-info position-badge">
+                                                درجه {{ $position->position_number }}
+                                            </span>
+                                                <div class="small text-muted mt-1">{{ $position->num_of_pos }} بست</div>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $percentage = $position->num_of_pos > 0
+                                                        ? round(($position->filled_codes_count / $position->num_of_pos) * 100)
+                                                        : 0;
+                                                @endphp
+                                                <div class="d-flex align-items-center">
+                                                <span class="font-weight-bold {{ $percentage >= 80 ? 'text-success' : ($percentage >= 50 ? 'text-warning' : 'text-danger') }}">
+                                                    {{ $percentage }}%
+                                                </span>
+                                                    <div class="progress progress-thin ml-2" style="width: 60px;">
+                                                        <div class="progress-bar {{ $percentage >= 80 ? 'bg-success' : ($percentage >= 50 ? 'bg-warning' : 'bg-danger') }}"
+                                                             style="width: {{ $percentage }}%"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="small text-muted">
+                                                    {{ $position->filled_codes_count }} از {{ $position->num_of_pos }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if($position->place)
+                                                    <div class="font-weight-bold">{{ $position->place->name }}</div>
+                                                    <div class="small text-muted">{{ $position->place->custom_code }}</div>
+                                                @else
+                                                    <span class="text-muted">--</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $vacantPositions = $position->num_of_pos - $position->codes_count;
+                                                @endphp
+                                                @if($vacantPositions > 0)
+                                                    <span class="badge badge-warning position-badge">
+                                                    <i class="fas fa-exclamation-triangle mr-1"></i>نیازمند
+                                                </span>
+                                                @elseif($position->filled_codes_count == $position->num_of_pos)
+                                                    <span class="badge badge-success position-badge">
+                                                    <i class="fas fa-check-circle mr-1"></i>کامل
+                                                </span>
+                                                @else
+                                                    <span class="badge badge-info position-badge">نیمه پر</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="{{ route('admin.office.positions.show', $position->id) }}"
+                                                       class="btn btn-sm btn-outline-primary" title="مشاهده">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
 
-                                            <!-- Position Code && Employees -->
-                                            <td class="text-wrap">
-                                                {{ $position->codes->count() }} ==> @foreach($position->codes as $code) ({{ $code->code }} - @if($code->employee) <a href="{{ route('admin.office.employees.show', $code->employee->id) }}" target="_blank">{{ $code->employee->name . ' ' . $code->employee->last_name }}</a>@else <span class="text-danger">خالی</span>@endif)
-                                                {{ $position->codes && $position->codes->count() < $position->num_of_pos ? ' - ' : '' }} @endforeach
+                                                    @can('office_position_edit')
+                                                        <a href="{{ route('admin.office.positions.edit', $position->id) }}"
+                                                           class="btn btn-sm btn-outline-info ml-1" title="ویرایش">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    @endcan
+
+                                                    @can('office_position_create')
+                                                        <a href="{{ route('admin.office.positions.create') }}?parent={{ $position->id }}"
+                                                           class="btn btn-sm btn-outline-success ml-1" title="افزودن زیرمجموعه">
+                                                            <i class="fas fa-plus"></i>
+                                                        </a>
+                                                    @endcan
+                                                </div>
                                             </td>
-                                            <td>{{ $position->position_number }} ({{ $position->num_of_pos }})</td>
-                                            <td>{{ $position->place->name ?? '' }} - {{ $position->place->custom_code ?? '' }}</td>
-                                            <td class="text-wrap">{{ $position->desc }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
                             </div>
-                            <!--/==/ End of Table -->
-                        </div>
-                        <!--/==/ End of All Positions -->
 
-                        <!-- Organization -->
-                        <div class="tab-pane" id="organ">
-                            <div class="main-content-label tx-13 mg-b-20">
-                                @lang('pages.positions.bcdOrg')
-                            </div>
-
-                            <div class="container">
-                                <div class="row bd">
-                                    <div class="tree m-2">
-                                        @can('organization_view')
-                                            <ul>
-                                                @foreach($organization as $organ)
-                                                    <li>
-                                                        <a href="{{ route('admin.office.positions.show', $organ->id) }}" style="background: #ba8b00; color: beige">{{ $organ->title }} ({{ $organ->num_of_pos }})</a>
-                                                        <ul>
-                                                            @foreach($organ->children as $admin)
-                                                                <li>
-                                                                    <a href="{{ route('admin.office.positions.show', $admin->id) }}" style="background: burlywood;">{{ $admin->title }} ({{ $admin->num_of_pos }})</a>
-                                                                    <ul>
-                                                                        @foreach($admin->children as $mgmt)
-                                                                            <li>
-                                                                                <a href="{{ route('admin.office.positions.show', $mgmt->id) }}" style="background: bisque;">{{ $mgmt->title }} ({{ $mgmt->num_of_pos }})</a>
-                                                                                <ul>
-                                                                                    @foreach($mgmt->children as $mgr)
-                                                                                        <li>
-                                                                                            <a href="{{ route('admin.office.positions.show', $mgr->id) }}" style="background: beige;">{{ $mgr->title }}  ({{ $mgr->num_of_pos }})</a>
-                                                                                        </li>
-                                                                                    @endforeach
-                                                                                </ul>
-                                                                            </li>
-                                                                        @endforeach
-                                                                    </ul>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endcan
-                                    </div>
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="small text-muted">
+                                    نمایش {{ $positions->firstItem() }} تا {{ $positions->lastItem() }} از {{ $positions->total() }} رکورد
+                                </div>
+                                <div>
+                                    {{ $positions->links() }}
                                 </div>
                             </div>
                         </div>
-                        <!--/==/ End of Organization -->
+
+                        <!-- Organization Chart Tab -->
+                        <div class="tab-pane fade" id="organ" role="tabpanel">
+                            <div class="tree-container">
+                                @include('admin.office.positions.inc.org_tab')
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!--/==/ End of Table Card -->
             </div>
         </div>
-        <!--/==/ End of Data Table -->
     </div>
 @endsection
-<!--/==/ End of Page Content -->
 
-<!-- Extra Scripts -->
 @section('extra_js')
     <!-- Data Table js -->
     <script src="{{ asset('backend/assets/plugins/datatable/jquery.dataTables.min.js') }}"></script>
@@ -192,7 +569,146 @@
     <script src="{{ asset('backend/assets/plugins/datatable/fileexport/buttons.print.min.js') }}"></script>
     <script src="{{ asset('backend/assets/plugins/datatable/fileexport/buttons.colVis.min.js') }}"></script>
 
-    <!-- Custom Scripts -->
-    <script src="{{ asset('assets/js/datatable.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            var table = $('#positionsTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Persian.json"
+                },
+                buttons: [
+                    'copy', 'excel', 'pdf'
+                ],
+                "pageLength": 25,
+                "order": [[0, 'desc']],
+                "responsive": true,
+                "dom": '<"top"fl>rt<"bottom"ip><"clear">',
+                "drawCallback": function(settings) {
+                    // Initialize tooltips on DataTable redraw
+                    $('[data-toggle="tooltip"]').tooltip();
+                }
+            });
+
+            // Filter button activation
+            function activateFilterButtons() {
+                const currentStatus = '{{ request("status") }}';
+                const currentLevel = '{{ request("level") }}';
+
+                // Activate status buttons
+                $('.filter-status').removeClass('active');
+                $('.filter-status[data-status="' + currentStatus + '"]').addClass('active');
+
+                // Activate level buttons
+                $('.filter-level').removeClass('active');
+                $('.filter-level[data-level="' + currentLevel + '"]').addClass('active');
+            }
+
+            activateFilterButtons();
+
+            // Status filter button click
+            $('.filter-status').on('click', function() {
+                const status = $(this).data('status');
+                $('#statusInput').val(status);
+                $('#filterForm').submit();
+            });
+
+            // Level filter button click
+            $('.filter-level').on('click', function() {
+                const level = $(this).data('level');
+                $('#levelInput').val(level);
+                $('#filterForm').submit();
+            });
+
+            // Per page change
+            $('#perPageSelect').on('change', function() {
+                $('#perPageInput').val($(this).val());
+                $('#filterForm').submit();
+            });
+
+            // Tab persistence
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                localStorage.setItem('activePositionTab', $(e.target).attr('href'));
+            });
+
+            var activeTab = localStorage.getItem('activePositionTab');
+            if (activeTab) {
+                $('#positionTabs a[href="' + activeTab + '"]').tab('show');
+            }
+
+            // Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Code dots hover effect
+            $(document).on('mouseenter', '.code-dot', function() {
+                $(this).css('transform', 'scale(1.3)');
+            }).on('mouseleave', '.code-dot', function() {
+                $(this).css('transform', 'scale(1)');
+            });
+
+            // Export to CSV function
+            window.exportTableToCSV = function() {
+                var data = [];
+                var headers = ['ID', 'عنوان بست', 'بست مافوق', 'کدها', 'درجه', 'تعداد', 'پر شده', 'موقعیت', 'وضعیت'];
+
+                $('#positionsTable tbody tr').each(function() {
+                    var row = [];
+                    $(this).find('td').each(function(index) {
+                        if (index !== 7) { // Skip actions column
+                            var text = $(this).text().trim();
+                            text = text.replace(/\s+/g, ' ').replace(/\n/g, ' ');
+                            row.push(text);
+                        }
+                    });
+                    data.push(row);
+                });
+
+                // Create CSV content
+                var csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+                csvContent += headers.join(",") + "\n";
+                data.forEach(function(rowArray) {
+                    var row = rowArray.map(cell => `"${cell}"`).join(",");
+                    csvContent += row + "\n";
+                });
+
+                // Add summary
+                csvContent += "\n";
+                csvContent += `"تاریخ خروجی","${new Date().toLocaleDateString('fa-IR')}"\n`;
+                csvContent += `"تعداد رکورد","${data.length}"\n`;
+
+                // Create download link
+                var encodedUri = encodeURI(csvContent);
+                var link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `positions_${new Date().getTime()}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // Keyboard shortcuts
+            $(document).keydown(function(e) {
+                // Ctrl + F for search focus
+                if (e.ctrlKey && e.keyCode === 70) {
+                    e.preventDefault();
+                    $('input[name="search"]').focus();
+                }
+                // Esc to clear search
+                if (e.keyCode === 27) {
+                    $('input[name="search"]').val('');
+                    if ($('input[name="search"]').is(':focus')) {
+                        $('#filterForm').submit();
+                    }
+                }
+            });
+
+            // Auto-submit search after 1 second of inactivity
+            var searchTimeout;
+            $('input[name="search"]').on('keyup', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function() {
+                    $('#filterForm').submit();
+                }, 1000);
+            });
+        });
+    </script>
 @endsection
-<!--/==/ End of Extra Scripts -->

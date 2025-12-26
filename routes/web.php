@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Office\BudgetController;
 use App\Http\Controllers\Admin\Office\CompanyController;
 use App\Http\Controllers\Admin\Office\EmployeeHelperController;
 use App\Http\Controllers\Admin\Office\EmployeeController;
+use App\Http\Controllers\Admin\Office\PositionCodeController;
 use App\Http\Controllers\Admin\Office\ResumeController;
 use App\Http\Controllers\Admin\Office\HostelController;
 use App\Http\Controllers\Admin\Office\LeaveController;
@@ -134,12 +135,27 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
         Route::resource('budgets', BudgetController::class);
 
         // ====================== Office ===========================
-        // Positions
         Route::resource('positions', PositionController::class);
+        // Positions
+        Route::prefix('positions')->name('positions.')->group(function () {
+            Route::get('export/pdf', [PositionController::class, 'exportPDF'])->name('export.pdf');
+            Route::get('export/excel', [PositionController::class, 'exportExcel'])->name('export.excel');
+            Route::get('export/csv', [PositionController::class, 'exportCSV'])->name('export.csv');
+        });
+
         Route::post('update-position-status', [PositionController::class, 'updatePositionStatus'])->name('updatePositionStatus');
         Route::get('appointment-positions', [PositionController::class, 'appointment'])->name('positions.appointment');
         Route::get('empty-positions', [PositionController::class, 'empty'])->name('positions.empty');
         Route::get('inactive-positions', [PositionController::class, 'inactive'])->name('positions.inactive');
+        // Position codes routes
+        Route::prefix('positions/{position}/codes')->name('positions.codes.')->group(function () {
+            Route::post('/', [PositionCodeController::class, 'store'])->name('store');
+            Route::get('/create', [PositionCodeController::class, 'create'])->name('create');
+            Route::get('/{code}/edit', [PositionCodeController::class, 'edit'])->name('edit');
+            Route::put('/{code}', [PositionCodeController::class, 'update'])->name('update');
+            Route::delete('/{code}', [PositionCodeController::class, 'destroy'])->name('destroy');
+        });
+
         // Add Position Code
         Route::post('position/{id}/add-code', [PositionController::class, 'add_code'])->name('positions.add_code');
         // Edit Position Code
@@ -266,4 +282,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
 
     // Settings
     Route::resource('settings', SettingController::class);
+});
+// Add this in routes/web.php temporarily
+Route::get('/test-edit/{id}', function($id) {
+    $position = \App\Models\Office\Position::find($id);
+    return app()->call([\App\Http\Controllers\Admin\Office\PositionController::class, 'edit'], ['position' => $position]);
 });
