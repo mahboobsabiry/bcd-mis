@@ -24,110 +24,88 @@ class Position extends Model
     protected $casts = [
         'status' => 'boolean',
     ];
-
-    // In Position model, add these methods:
-
-    /**
-     * Get count of positions that are fully appointed
-     */
-    public static function getFullyAppointedCount(): int
-    {
-        return cache()->remember('positions_fully_appointed_count', 300, function () {
-            return self::whereHas('codes', function($q) {
-                $q->whereHas('employee');
-            })
-                ->withCount(['codes', 'codes as filled_codes_count' => function($q) {
-                    $q->whereHas('employee');
-                }])
-                ->get()
-                ->filter(function($position) {
-                    return $position->filled_codes_count >= $position->num_of_pos;
-                })
-                ->count();
-        });
-    }
-
-    /**
-     * Get count of positions that are empty
-     */
-    public static function getEmptyPositionsCount(): int
-    {
-        return cache()->remember('positions_empty_count', 300, function () {
-            // Positions with no codes
-            $noCodes = self::doesntHave('codes')->count();
-
-            // Positions with codes but all are empty
-            $allCodesEmpty = self::whereHas('codes', function($q) {
-                $q->whereDoesntHave('employee');
-            })
-                ->withCount(['codes', 'codes as empty_codes_count' => function($q) {
-                    $q->whereDoesntHave('employee');
-                }])
-                ->get()
-                ->filter(function($position) {
-                    return $position->empty_codes_count >= $position->num_of_pos;
-                })
-                ->count();
-
-            return $noCodes + $allCodesEmpty;
-        });
-    }
-
-    /**
-     * Get count of positions that need employees
-     */
-    public static function getVacantPositionsCount(): int
-    {
-        return cache()->remember('positions_vacant_count', 300, function () {
-            return self::withCount(['codes', 'employees'])
-                ->get()
-                ->filter(function($position) {
-                    $vacant = $position->num_of_pos - $position->codes_count;
-                    return $vacant > 0;
-                })
-                ->count();
-        });
-    }
-
-    /**
-     * Get total number of codes
-     */
-    public static function getTotalCodesCount(): int
-    {
-        return cache()->remember('total_codes_count', 300, function () {
-            return \App\Models\Office\PositionCode::count();
-        });
-    }
-
-    /**
-     * Get total filled codes count
-     */
-    public static function getFilledCodesCount(): int
-    {
-        return cache()->remember('filled_codes_count', 300, function () {
-            return \App\Models\Office\PositionCode::whereHas('employee')->count();
-        });
-    }
-
-    // Add these methods to your Position model:
-    public function getCodesCountAttribute()
-    {
-        return $this->codes()->count();
-    }
-
     public function getFilledCodesCountAttribute()
     {
-        return $this->codes()->whereHas('employee')->count();
+        if (!$this->relationLoaded('codes')) {
+            return 0;
+        }
+
+        return $this->codes->where('employee', '!=', null)->count();
     }
 
-    public function getEmptyCodesCountAttribute()
+    // Scopes
+    /**
+     * Scope for fully filled positions (all position slots filled with employees)
+     */
+    public function scopeFullyFilled($query)
     {
-        return $this->codes()->whereDoesntHave('employee')->count();
+        return $query->whereHas('codes', function($q) {
+            $q->whereHas('employee');
+        })
+            ->withCount(['codes', 'codes as filled_codes_count' => function($q) {
+                $q->whereHas('employee');
+            }])
+            ->get() // Execute query to get collection
+            ->filter(function($position) {
+                return $position->filled_codes_count >= $position->num_of_pos;
+            })
+            ->values(); // Reset keys
     }
 
-    public function getVacantPositionsCountAttribute()
+    /**
+     * Scope for positions with vacancies
+     * Simplified version without HAVING clause
+     */
+    public function scopeWithVacancies($query)
     {
-        return max(0, $this->num_of_pos - $this->codes_count);
+        return $query->where(function($q) {
+            // Positions with less codes than required positions
+            $q->whereRaw('num_of_pos > (
+            SELECT COUNT(*) FROM position_codes
+            WHERE position_codes.position_id = positions.id
+        )')
+                // OR positions where some codes don't have employees
+                ->orWhereExists(function($subQuery) {
+                    $subQuery->select(\DB::raw(1))
+                        ->from('position_codes')
+                        ->whereColumn('position_codes.position_id', 'positions.id')
+                        ->whereNotExists(function($q) {
+                            $q->select(\DB::raw(1))
+                                ->from('employees')
+                                ->whereColumn('employees.ps_code_id', 'position_codes.id');
+                        });
+                });
+        });
+    }
+
+    /**
+     * Scope for positions with no codes
+     */
+    public function scopeUncoded($query)
+    {
+        return $query->whereDoesntHave('codes');
+    }
+
+    /**
+     * Scope for positions with all codes empty
+     */
+    public function scopeAllCodesEmpty($query)
+    {
+        return $query->whereHas('codes', function($q) {
+            $q->whereDoesntHave('employee');
+        })->whereDoesntHave('codes', function($q) {
+            $q->whereHas('employee');
+        });
+    }
+
+    /**
+     * Scope for positions with at least one filled code
+     */
+    public function scopeHasFilledCodes($query)
+    {
+        return $query->whereHas('codes', function($q) {
+            $q->whereHas('employee');
+        });
     }
 
     // Keep your original tree method - DON'T CHANGE THIS
@@ -178,12 +156,6 @@ class Position extends Model
         return $query->whereHas('codes', function ($q) {
             $q->whereDoesntHave('employee');
         });
-    }
-
-    // Position with no codes created yet
-    public function scopeUncoded($query)
-    {
-        return $query->whereDoesntHave('codes');
     }
 
     // Alternative tree method (optional, keeps your original tree method unchanged)

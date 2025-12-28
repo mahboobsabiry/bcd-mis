@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SystemController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Warehouse\AssuranceController;
 use App\Http\Controllers\Admin\Website\AnnouncementController;
@@ -57,6 +58,7 @@ Auth::routes(['register' => false]);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('system/stats', [SystemController::class, 'getStats'])->name('system.stats');
     // Activities
     Route::get('activities', [AdminController::class, 'activities'])->name('activities');
     Route::post('delete-activity/{id}', [AdminController::class, 'deleteActivity'])->name('activity.destroy');
@@ -142,6 +144,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
             Route::get('export/excel', [PositionController::class, 'exportExcel'])->name('export.excel');
             Route::get('export/csv', [PositionController::class, 'exportCSV'])->name('export.csv');
         });
+        Route::get('/admin/office/positions/org-chart', [PositionController::class, 'getOrgChart'])
+            ->name('positions.org-chart');
 
         Route::post('update-position-status', [PositionController::class, 'updatePositionStatus'])->name('updatePositionStatus');
         Route::get('appointment-positions', [PositionController::class, 'appointment'])->name('positions.appointment');

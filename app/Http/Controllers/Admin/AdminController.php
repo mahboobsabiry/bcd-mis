@@ -26,16 +26,6 @@ class AdminController extends Controller
          $top_users = User::all()->take(5);
          $logActivities = Activity::orderBy('created_at', 'desc')->take(5)->get();
 
-         // Send appointment and empty positions count to dashboard
-         // Sum number of positions
-         // $sum_appointment = Position::all()->sum('num_of_pos');
-         // Count all employees
-         // $employees_count = Employee::all()->count();
-         // Count all empty positions
-         // $empty_positions = $sum_appointment - $employees_count;
-         // Count all appointment positions
-         // $appointment_positions = $sum_appointment - $empty_positions;
-
         $appointment_positions = PositionCode::whereHas('employee')->count();
         $empty_positions = PositionCode::whereDoesntHave('employee')->count();
 

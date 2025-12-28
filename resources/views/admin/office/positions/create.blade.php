@@ -258,8 +258,8 @@
                                                 @lang('pages.positions.underHand')
                                             </label>
                                             <select id="parent_id" name="parent_id" class="form-control select2 @error('parent_id') is-invalid @enderror" required>
-                                                <option value="">انتخاب بست مافوق...</option>
-                                                <option value="">ریاست (بدون مافوق)</option>
+{{--                                                <option value="">انتخاب بست مافوق...</option>--}}
+{{--                                                <option value="">ریاست (بدون مافوق)</option>--}}
                                                 @foreach($positions as $position)
                                                     <option value="{{ $position->id }}" {{ old('parent_id') == $position->id ? 'selected' : '' }}>
                                                         {{ $position->title }}
@@ -301,7 +301,6 @@
                                                 موقعیت
                                             </label>
                                             <select id="place_id" name="place_id" class="form-control select2 @error('place_id') is-invalid @enderror" required>
-                                                <option value="">انتخاب موقعیت...</option>
                                                 @foreach($places as $place)
                                                     <option value="{{ $place->id }}" {{ old('place_id') == $place->id ? 'selected' : '' }}>
                                                         {{ $place->name }}

@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Office;
 
-use App\Exports\PositionsExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePositionRequest;
 use App\Models\Office\Position;
 use App\Models\Office\PositionCode;
 use App\Models\Place;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class PositionController extends Controller
 {
@@ -21,6 +20,15 @@ class PositionController extends Controller
         $this->middleware('permission:office_position_create', ['only' => ['create','store']]);
         $this->middleware('permission:office_position_edit', ['only' => ['edit','update', 'updatePositionStatus']]);
         $this->middleware('permission:office_position_delete', ['only' => ['destroy']]);
+        $this->middleware(function ($request, $next) {
+            if ($request->ajax()) {
+                // Disable debugbar for AJAX requests
+                if (class_exists('Barryvdh\Debugbar\LaravelDebugbar')) {
+                    \Debugbar::disable();
+                }
+            }
+            return $next($request);
+        });
     }
 
     /**
@@ -31,19 +39,36 @@ class PositionController extends Controller
         // Use pagination for initial load
         $perPage = $request->get('per_page', 25);
 
-        // Base query with eager loading
-        $query = Position::with([
-            'parent:id,title',
+        // Base query with SELECT only needed columns and optimized eager loading
+        $query = Position::select([
+            'id',
+            'title',
+            'desc',
+            'position_number',
+            'num_of_pos',
+            'parent_id',
+            'place_id',
+            'status',
+            'created_at'
+        ])->with([
+            'parent:id,title', // Only need title from parent
             'place:id,name,custom_code',
-            'codes:id,position_id,code',
-            'codes.employee:id,ps_code_id,name,last_name'
-        ])
-            ->withCount(['codes', 'employees'])
-            ->withCount(['codes as filled_codes_count' => function($query) {
-                $query->whereHas('employee');
-            }]);
+            // Optimize codes relationship - load only what's needed
+            'codes' => function ($q) {
+                $q->select(['id', 'position_id', 'code'])
+                    ->with(['employee:id,ps_code_id,name,last_name']);
+            }
+        ]);
 
-        // Apply filters if any
+        // Add counts as separate queries to avoid N+1 but more efficiently
+        $query->withCount([
+            'codes',
+            'codes as filled_codes_count' => function($query) {
+                $query->whereHas('employee');
+            }
+        ]);
+
+        // Apply search filter
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -53,124 +78,188 @@ class PositionController extends Controller
             });
         }
 
-        // In PositionController index method, replace the status filter section:
-
-        if ($request->has('status')) {
-            $status = $request->status;
-
-            switch ($status) {
-                case 'full':
-                    // Positions where all codes are filled
-                    $query->whereHas('codes', function($q) {
-                        $q->whereHas('employee');
-                    });
-                    break;
-
-                case 'vacant':
-                    // Positions with less codes than num_of_pos
-                    $query->whereRaw('num_of_pos > (SELECT COUNT(*) FROM position_codes WHERE position_codes.position_id = positions.id)');
-                    break;
-
-                case 'uncoded':
-                    // Positions with no codes
-                    $query->whereDoesntHave('codes');
-                    break;
-
-                case 'empty':
-                    // Positions with codes but no employees
-                    $query->whereHas('codes', function($q) {
-                        $q->whereDoesntHave('employee');
-                    });
-                    break;
-            }
-        }
-
-        // Side
+        // Apply level filter first (it's cheaper than status filter)
         if ($request->has('level')) {
             $level = $request->level;
-            if ($level == '4') {
-                $query->where('position_number', '>=', 4);
+            if ($level == '7') {
+                $query->where('position_number', '>=', 7);
             } else {
                 $query->where('position_number', $level);
             }
         }
 
-        $positions = $query->orderBy('created_at', 'desc')->paginate($perPage);
-
-        // Get all positions for organization tree (no filters)
-        $organization = Position::tree();
-
-        // Get all positions for DataTables (without pagination)
-        $allPositionsForTable = Position::select(['id', 'title', 'position_number', 'num_of_pos', 'created_at'])
-            ->withCount('codes')
-            ->withCount(['codes as filled_codes_count' => function($query) {
-                $query->whereHas('employee');
-            }])
-            ->get();
-
-        return view('admin.office.positions.index', compact('positions', 'organization', 'allPositionsForTable'));
-    }
-
-    public function exportPDF(Request $request)
-    {
-        $positions = $this->getFilteredPositions($request);
-        $lang = $request->get('lang', 'fa');
-
-        $pdf = Pdf::loadView('admin.office.positions.export.pdf', [
-            'positions' => $positions,
-            'lang' => $lang,
-            'date' => now()->format('Y/m/d H:i')
-        ]);
-
-        $pdf->setPaper('a4', 'portrait');
-        return $pdf->download("positions_report_{$lang}.pdf");
-    }
-
-    public function exportExcel(Request $request)
-    {
-        $lang = $request->get('lang', 'fa');
-        return Excel::download(new PositionsExport($request), "positions_report_{$lang}.xlsx");
-    }
-
-    public function exportCSV(Request $request)
-    {
-        $lang = $request->get('lang', 'fa');
-        return Excel::download(new PositionsExport($request), "positions_report_{$lang}.csv", \Maatwebsite\Excel\Excel::CSV);
-    }
-
-    private function getFilteredPositions($request = null)
-    {
-        $query = Position::with(['codes.employee', 'parent', 'place']);
-
-        // If a request is provided (for exports), apply filters
-        if ($request && $request instanceof \Illuminate\Http\Request) {
-            // Apply status filter if provided
-            if ($request->filled('status')) {
-                $status = $request->get('status');
-                if ($status === 'filled') {
-                    $query->whereHas('codes.employee');
-                } elseif ($status === 'empty') {
-                    $query->whereDoesntHave('codes.employee');
+        // Apply status filter - use database queries as much as possible
+        if ($request->has('status')) {
+            $status = $request->status;
+            $query->withCount([
+                'codes',
+                'codes as filled_codes_count' => function($q) {
+                    $q->whereHas('employee');
                 }
-            }
+            ]);
 
-            // Apply level filter if provided
-            if ($request->filled('level')) {
-                $query->where('position_number', $request->get('level'));
-            }
+            if ($status == 'full') {
+                // Using havingRaw for calculated columns
+                $query->havingRaw('filled_codes_count >= num_of_pos');
 
-            // Apply current DataTables filters if requested
-            if ($request->filled('apply_filters') && $request->get('apply_filters')) {
-                // Add any existing filter logic from your index method here
-                // For example, search term filtering
-                if ($request->filled('search')) {
-                    $search = $request->get('search');
-                    $query->where('title', 'like', "%{$search}%");
-                }
+            } elseif ($status == 'vacant') {
+                // Has codes but not all are filled
+                $query->where(function($q) {
+                    $q->whereRaw('filled_codes_count < num_of_pos')
+                        ->orWhereRaw('codes_count = 0');
+                });
+
+            } elseif ($status == 'uncoded') {
+                // No codes at all
+                $query->havingRaw('codes_count = 0');
             }
         }
 
-        return $query->get();
+        // Order by position_number to see hierarchy
+        $positions = $query->orderBy('position_number', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->paginate($perPage);
+
+        // Get basic statistics without loading all data
+        $stats = $this->getPositionsStats();
+
+        // For organization tree - get pre-calculated tree data
+        $organizationData = $this->getOrganizationTreeData();
+
+        return view('admin.office.positions.index', compact('positions', 'organizationData', 'stats'));
+    }
+
+    /**
+     * Get positions statistics without loading all records
+     */
+    private function getPositionsStats()
+    {
+        return Cache::remember('positions_stats', 300, function () { // Cache for 5 minutes
+            return [
+                'total_positions' => \App\Models\Office\PositionCode::count(),
+                'filled_positions' => \App\Models\Office\PositionCode::whereHas('employee')->count(),
+                'empty_positions' => \App\Models\Office\PositionCode::whereDoesntHave('employee')->count(),
+                'uncoded_positions' => \App\Models\Office\Position::doesntHave('codes')->count(),
+            ];
+        });
+    }
+
+    /**
+     * Get organization tree data efficiently with tree structure already built
+     */
+    private function getOrganizationTreeData()
+    {
+        return Cache::remember('organization_tree_data', 300, function () {
+            $items = Position::select(['id', 'title', 'position_number', 'parent_id', 'num_of_pos'])
+                ->withCount(['codes as filled_codes_count' => function($query) {
+                    $query->whereHas('employee');
+                }])
+                ->get()
+                ->map(function ($position) {
+                    return [
+                        'id' => $position->id,
+                        'title' => $position->title,
+                        'position_number' => $position->position_number,
+                        'parent_id' => $position->parent_id,
+                        'num_of_pos' => $position->num_of_pos,
+                        'filled_codes_count' => $position->filled_codes_count,
+                        'percentage' => $position->num_of_pos > 0
+                            ? round(($position->filled_codes_count / $position->num_of_pos) * 100)
+                            : 0,
+                        'status' => $position->filled_codes_count >= $position->num_of_pos ? 'filled' : 'vacant'
+                    ];
+                })
+                ->toArray();
+
+            // Build tree structure in PHP (this is more efficient than doing it in view)
+            $tree = [];
+            $itemsByParent = [];
+
+            // Group items by parent_id
+            foreach ($items as $item) {
+                $parentId = $item['parent_id'] ?? 0;
+                if (!isset($itemsByParent[$parentId])) {
+                    $itemsByParent[$parentId] = [];
+                }
+                $itemsByParent[$parentId][] = $item;
+            }
+
+            // Build tree recursively
+            $buildTree = function($parentId = null) use (&$buildTree, $itemsByParent) {
+                $tree = [];
+                if (isset($itemsByParent[$parentId])) {
+                    foreach ($itemsByParent[$parentId] as $item) {
+                        $children = $buildTree($item['id']);
+                        if ($children) {
+                            $item['children'] = $children;
+                        }
+                        $tree[] = $item;
+                    }
+                }
+                return $tree;
+            };
+
+            $tree = $buildTree(null);
+
+            // Find root position
+            $rootPosition = null;
+            if (count($tree) > 0) {
+                $rootPosition = $tree[0]; // First item in root level
+            } elseif (count($items) > 0) {
+                $rootPosition = $items[0]; // Fallback to first item
+            }
+
+            // Calculate statistics
+            $positionStats = [];
+            $totalPositions = 0;
+            $totalFilled = 0;
+            $totalVacant = 0;
+
+            foreach($items as $position) {
+                $grade = $position['position_number'];
+                if(!isset($positionStats[$grade])) {
+                    $positionStats[$grade] = [
+                        'count' => 0,
+                        'filled' => 0,
+                        'vacant' => 0,
+                        'title' => 'بست ' . $grade
+                    ];
+                }
+                $positionStats[$grade]['count']++;
+                $totalPositions += $position['num_of_pos'];
+
+                $filled = $position['filled_codes_count'];
+                $positionStats[$grade]['filled'] += $filled;
+                $positionStats[$grade]['vacant'] += ($position['num_of_pos'] - $filled);
+
+                $totalFilled += $filled;
+                $totalVacant += ($position['num_of_pos'] - $filled);
+            }
+
+            ksort($positionStats);
+            $fillRate = ($totalFilled + $totalVacant) > 0 ? round(($totalFilled / ($totalFilled + $totalVacant)) * 100) : 0;
+
+            return [
+                'tree' => $tree,
+                'rootPosition' => $rootPosition,
+                'positionStats' => $positionStats,
+                'totalPositions' => $totalPositions,
+                'totalFilled' => $totalFilled,
+                'totalVacant' => $totalVacant,
+                'fillRate' => $fillRate,
+                'items' => $items // Keep flat array for easy access
+            ];
+        });
+    }
+
+    public function getOrgChart()
+    {
+        $organizationData = $this->getOrganizationTreeData();
+
+        // Pass items as flat array for the tree rendering
+        return view('admin.office.positions.inc.org_tab', [
+            'organizationData' => $organizationData
+        ]);
     }
 
     // Create
@@ -178,37 +267,87 @@ class PositionController extends Controller
     {
         $positions = Position::all();
         $places = Place::all();
+        Cache::forget('positions_stats');
+        Cache::forget('organization_tree');
         return view('admin.office.positions.create', compact('positions', 'places'));
     }
 
-    // Store
-    public function store(StorePositionRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
-        $position           = new Position();
-        $position->parent_id    = $request->parent_id;
-        $position->place_id     = $request->place_id;
-        $position->title        = $request->title;
-        $position->position_number = $request->position_number;
-        $position->num_of_pos   = $request->num_of_pos;
-        $position->desc         = $request->desc;
-        $position->status       = 1;
-        $position->save();
-
-        // Store Code
-        foreach ($request->codes as $value) {
-            $position->codes()->create($value);
-        }
-
-        activity('added')
-            ->causedBy(Auth::user())
-            ->performedOn($position)
-            ->log(trans('messages.positions.addedPositionMsg'));
-
-        $message = trans('messages.positions.addedPositionMsg');
-        return redirect()->route('admin.office.positions.show', $position->id)->with([
-            'message'   => $message,
-            'alertType' => 'success'
+        // Validate the request
+        $validated = $request->validate([
+            'parent_id' => 'nullable|exists:positions,id',
+            'place_id' => 'required|exists:places,id',
+            'title' => 'required|string|max:255',
+            'position_number' => 'required|integer|min:1',
+            'num_of_pos' => 'required|integer|min:1',
+            'desc' => 'nullable|string',
+            'status' => 'nullable|boolean',
+            'codes' => 'nullable|array',
+            'codes.*' => 'string|max:50',
         ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Create the position
+            $position = Position::create([
+                'parent_id' => $validated['parent_id'] ?? null,
+                'place_id' => $validated['place_id'],
+                'title' => $validated['title'],
+                'position_number' => $validated['position_number'],
+                'num_of_pos' => $validated['num_of_pos'],
+                'desc' => $validated['desc'] ?? null,
+                'status' => $validated['status'] ?? true,
+            ]);
+
+            // Create position codes if provided
+            if (!empty($validated['codes'])) {
+                foreach ($validated['codes'] as $codeValue) {
+                    $position->codes()->create([
+                        'code' => trim($codeValue),
+                        'status' => 1,
+                        'info' => "Created with position {$position->title}"
+                    ]);
+                }
+            }
+
+            // Log activity
+            activity('created')
+                ->causedBy(Auth::user())
+                ->performedOn($position)
+                ->withProperties([
+                    'codes_created' => count($validated['codes'] ?? []),
+                    'parent_id' => $position->parent_id
+                ])
+                ->log("بست {$position->title} ایجاد شد");
+
+            DB::commit();
+
+            return redirect()->route('admin.office.positions.index')
+                ->with([
+                    'message' => 'بست با موفقیت ایجاد شد.',
+                    'alertType' => 'success'
+                ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            \Log::error('Position creation failed: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'error' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with([
+                    'message' => 'خطا در ایجاد بست. لطفاً دوباره تلاش کنید.',
+                    'alertType' => 'error'
+                ]);
+        }
     }
 
     // Show
@@ -230,7 +369,8 @@ class PositionController extends Controller
             ->get();
 
         $places = Place::orderBy('name')->get();
-
+        Cache::forget('positions_stats');
+        Cache::forget('organization_tree');
         return view('admin.office.positions.edit', compact('position', 'positions', 'places'));
     }
 
@@ -500,7 +640,8 @@ class PositionController extends Controller
 
             // Delete the position
             $position->delete();
-
+            Cache::forget('positions_stats');
+            Cache::forget('organization_tree');
             return back()->with([
                 'message'   => 'بست با موفقیت حذف شد.',
                 'alertType' => 'success'
@@ -508,7 +649,8 @@ class PositionController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Position deletion error: ' . $e->getMessage());
-
+            Cache::forget('positions_stats');
+            Cache::forget('organization_tree');
             return back()->with([
                 'message'   => 'خطا در حذف بست. لطفاً دوباره تلاش کنید.',
                 'alertType' => 'danger'

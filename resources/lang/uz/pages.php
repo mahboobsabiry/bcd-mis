@@ -35,6 +35,18 @@ return [
         'inactivePositions' => "فعال ایمس پوزیتسیه‌لر",
         'places'            => "جای‌لر",
         'todaysDate'        => "بوگونگی سنه",
+
+        // New
+        'quickStats'    => 'آمار سریع',
+        'systemStatus'  => 'وضعیت سیستم',
+        'memoryUsage'   => 'مصرف حافظه',
+        'systemLoad'    => 'بار سیستم',
+        'responseTime'  => 'زمان پاسخ',
+        'appVersion'    => 'نسخه برنامه',
+        'onlineUsers'   => 'کاربران آنلاین',
+        'diskUsage'     => 'مصرف دیسک',
+        'pendingActions' => 'عملیات در انتظار',
+        'systemUptime'  => 'زمان کارکرد سیستم'
     ],
 
     'companies' => [

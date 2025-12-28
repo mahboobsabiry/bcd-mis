@@ -20,8 +20,9 @@ return [
         'totalMoney'            => 'Total Money',
         'usersAcDetails'        => 'Users activities with details',
         'usersWithMostAc'       => 'Users list based on their activities.',
+        'welcomeMessage'        => 'د گمرک بلخ مدیریت سیستم ته شه راغلاست. تول شیان کنترل لاندی دی!',
         'welcomeToBCHS'         => 'د بلخ د ګمرک ریاست د مرستې سیستم ته ښه راغلاست',
-        'welcomeToDashboard'    => 'داشبورد ته شه راغلاست',
+        'welcomeToDashboard'    => 'داشبورد ته شه راغلاست'
     ],
     'login' => [
         'loginToYourAcc'    => 'Login to Your Account',

@@ -37,6 +37,18 @@ return [
         'inactivePositions' => "Inactive Positions",
         'places'            => "Places",
         'todaysDate'        => "Today's Date",
+
+        // New
+        'quickStats'    => 'Quick Stats',
+        'systemStatus'  => 'System Status',
+        'memoryUsage'   => 'Memory Usage',
+        'systemLoad'    => 'System Load',
+        'responseTime'  => 'Response Time',
+        'appVersion'    => 'Application Version',
+        'onlineUsers'   => 'Online Users',
+        'diskUsage'     => 'Disk Usage',
+        'pendingActions' => 'Pending Actions',
+        'systemUptime'  => 'System Uptime'
     ],
 
     'companies' => [

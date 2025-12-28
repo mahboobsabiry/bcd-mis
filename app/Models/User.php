@@ -61,6 +61,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function scopeOnline($query)
+    {
+        $timeout = now()->subMinutes(5);
+        return $query->where('last_seen', '>=', $timeout);
+    }
+
     // Place
     public function place() : Relation
     {

@@ -20,8 +20,9 @@ return [
         'totalMoney'            => 'Total Money',
         'usersAcDetails'        => 'Users activities with details',
         'usersWithMostAc'       => 'Users list based on their activities.',
+        'welcomeMessage'        => 'سیستم مدیریت گمرک بلخ که خوش کیلیب‌سیز. همه نیرسه کنترل گه!',
         'welcomeToBCHS'         => 'بلخ گمرک ریاست سیستم گه خوش کیلدیز',
-        'welcomeToDashboard'    => 'داشبورد گه خوش کیلدیز',
+        'welcomeToDashboard'    => 'داشبورد گه خوش کیلدیز'
     ],
     'login' => [
         'loginToYourAcc'    => 'حساب یز ده کرینگ',

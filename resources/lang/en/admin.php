@@ -20,8 +20,9 @@ return [
         'totalMoney'            => 'Total Money',
         'usersAcDetails'        => 'Users activities with details',
         'usersWithMostAc'       => 'Users list based on their activities.',
+        'welcomeMessage'        => 'Welcome to Balkh Custom Department MIS. Everything is under control!',
         'welcomeToBCHS'         => 'Welcome to Balkh Custom Helper System',
-        'welcomeToDashboard'    => 'Welcome to Dashboard',
+        'welcomeToDashboard'    => 'Welcome to Dashboard'
     ],
     'header' => [
         'accSettings'   => 'Account Settings',

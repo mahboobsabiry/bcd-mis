@@ -29,7 +29,6 @@
             border-radius: 8px;
             color: white;
             margin-bottom: 1rem;
-            cursor: pointer;
             transition: transform 0.3s;
         }
 
@@ -188,6 +187,22 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
         }
+        /* Optimize animations */
+        .stats-card, .position-card {
+            transition: transform 0.2s ease;
+        }
+
+        /* Reduce shadows on mobile */
+        @media (max-width: 768px) {
+            .position-card {
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
+        }
+
+        /* Optimize code dots rendering */
+        .code-dots {
+            will-change: transform;
+        }
     </style>
 @endsection
 
@@ -217,59 +232,59 @@
         <!-- Statistics Cards -->
         <div class="row mb-4">
             <div class="col-md-3">
-                <a href="{{ route('admin.office.positions.index') }}" class="text-decoration-none">
+                <div class="text-decoration-none">
                     <div class="stats-card" style="background: linear-gradient(135deg, var(--primary-color), #6c5ce7);">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-0">کل بست ها</h6>
-                                <div class="stats-number">{{ \App\Models\Office\Position::count() }}</div>
+                                <div class="stats-number">{{ $stats['total_positions'] ?? 0 }}</div>
                             </div>
                             <i class="fas fa-layer-group fa-2x opacity-50"></i>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
 
             <div class="col-md-3">
-                <a href="{{ route('admin.office.positions.appointment') }}" class="text-decoration-none">
+                <div class="text-decoration-none">
                     <div class="stats-card" style="background: linear-gradient(135deg, var(--success-color), #20c997);">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-0">بست های پر</h6>
-                                <div class="stats-number">{{ \App\Models\Office\Position::getFullyAppointedCount() }}</div>
+                                <div class="stats-number">{{ $stats['filled_positions'] ?? 0 }}</div>
                             </div>
                             <i class="fas fa-user-check fa-2x opacity-50"></i>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
 
             <div class="col-md-3">
-                <a href="{{ route('admin.office.positions.empty') }}" class="text-decoration-none">
+                <div class="text-decoration-none">
                     <div class="stats-card" style="background: linear-gradient(135deg, var(--warning-color), #ff922b);">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-0">بست های خالی</h6>
-                                <div class="stats-number">{{ \App\Models\Office\Position::getEmptyPositionsCount() }}</div>
+                                <div class="stats-number">{{ $stats['empty_positions'] ?? 0 }}</div>
                             </div>
                             <i class="fas fa-user-slash fa-2x opacity-50"></i>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
 
             <div class="col-md-3">
-                <a href="?status=uncoded" class="text-decoration-none">
+                <div class="text-decoration-none">
                     <div class="stats-card" style="background: linear-gradient(135deg, var(--info-color), #3dc7be);">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-0">بدون کد</h6>
-                                <div class="stats-number">{{ \App\Models\Office\Position::doesntHave('codes')->count() }}</div>
+                                <div class="stats-number">{{ $stats['uncoded_positions'] ?? 0 }}</div>
                             </div>
                             <i class="fas fa-key fa-2x opacity-50"></i>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
 
@@ -301,16 +316,16 @@
                     <div class="col-md-4 mb-3">
                         <div class="filter-btn-group">
                             <span class="mr-2 text-muted small">وضعیت:</span>
-                            <button type="button" class="btn btn-outline-secondary text-white filter-status" data-status="">
+                            <button type="button" class="btn filter-status {{ !request('status') ? 'btn-primary' : 'btn-outline-secondary' }}" data-status="">
                                 همه
                             </button>
-                            <button type="button" class="btn btn-outline-success filter-status" data-status="full">
+                            <button type="button" class="btn filter-status {{ request('status') == 'full' ? 'btn-primary' : 'btn-outline-success' }}" data-status="full">
                                 پر
                             </button>
-                            <button type="button" class="btn btn-outline-warning filter-status" data-status="vacant">
+                            <button type="button" class="btn filter-status {{ request('status') == 'vacant' ? 'btn-primary' : 'btn-outline-warning' }}" data-status="vacant">
                                 خالی
                             </button>
-                            <button type="button" class="btn btn-outline-info filter-status" data-status="uncoded">
+                            <button type="button" class="btn filter-status {{ request('status') == 'uncoded' ? 'btn-primary' : 'btn-outline-info' }}" data-status="uncoded">
                                 بدون کد
                             </button>
                         </div>
@@ -323,17 +338,20 @@
                             <button type="button" class="btn btn-outline-secondary text-white filter-level" data-level="">
                                 همه
                             </button>
-                            <button type="button" class="btn btn-outline-primary filter-level" data-level="1">
-                                1
-                            </button>
-                            <button type="button" class="btn btn-outline-primary filter-level" data-level="2">
-                                2
-                            </button>
                             <button type="button" class="btn btn-outline-primary filter-level" data-level="3">
                                 3
                             </button>
-                            <button type="button" class="btn btn-outline-primary filter-level" data-level="3">
-                                4+
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="4">
+                                4
+                            </button>
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="5">
+                                5
+                            </button>
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="6">
+                                6
+                            </button>
+                            <button type="button" class="btn btn-outline-primary filter-level" data-level="7">
+                                7+
                             </button>
                         </div>
                     </div>
@@ -571,144 +589,120 @@
 
     <script>
         $(document).ready(function() {
-            // Initialize DataTable
-            var table = $('#positionsTable').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Persian.json"
-                },
-                buttons: [
-                    'copy', 'excel', 'pdf'
-                ],
-                "pageLength": 25,
-                "order": [[0, 'desc']],
-                "responsive": true,
-                "dom": '<"top"fl>rt<"bottom"ip><"clear">',
-                "drawCallback": function(settings) {
-                    // Initialize tooltips on DataTable redraw
-                    $('[data-toggle="tooltip"]').tooltip();
+            // Lazy load DataTable
+            setTimeout(function() {
+                var table = $('#positionsTable').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Persian.json"
+                    },
+                    "pageLength": 25,
+                    "order": [[0, 'desc']],
+                    "responsive": true,
+                    "processing": true, // Show processing indicator
+                    "serverSide": false, // Client-side processing is fine for moderate data
+                    "deferRender": true, // Defer rendering for performance
+                    "dom": '<"top"fl>rt<"bottom"ip><"clear">',
+                    "initComplete": function() {
+                        // Initialize tooltips after table is ready
+                        $('[data-toggle="tooltip"]').tooltip();
+                    }
+                });
+
+                // Only add buttons if needed
+                if ($('.dt-buttons').length === 0) {
+                    new $.fn.dataTable.Buttons(table, {
+                        buttons: ['copy', 'excel', 'pdf']
+                    });
+                    table.buttons().container().appendTo($('#exportButtons'));
+                }
+            }, 500); // Delay table initialization by 500ms
+
+            // Optimize tooltip initialization
+            $(document).on('mouseenter', '[data-toggle="tooltip"]', function() {
+                if (!$(this).data('bs.tooltip')) {
+                    $(this).tooltip();
                 }
             });
 
-            // Filter button activation
-            function activateFilterButtons() {
-                const currentStatus = '{{ request("status") }}';
-                const currentLevel = '{{ request("level") }}';
-
-                // Activate status buttons
-                $('.filter-status').removeClass('active');
-                $('.filter-status[data-status="' + currentStatus + '"]').addClass('active');
-
-                // Activate level buttons
-                $('.filter-level').removeClass('active');
-                $('.filter-level[data-level="' + currentLevel + '"]').addClass('active');
-            }
-
-            activateFilterButtons();
-
-            // Status filter button click
-            $('.filter-status').on('click', function() {
-                const status = $(this).data('status');
-                $('#statusInput').val(status);
-                $('#filterForm').submit();
-            });
-
-            // Level filter button click
-            $('.filter-level').on('click', function() {
-                const level = $(this).data('level');
-                $('#levelInput').val(level);
-                $('#filterForm').submit();
-            });
-
-            // Per page change
-            $('#perPageSelect').on('change', function() {
-                $('#perPageInput').val($(this).val());
-                $('#filterForm').submit();
-            });
-
-            // Tab persistence
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                localStorage.setItem('activePositionTab', $(e.target).attr('href'));
-            });
-
-            var activeTab = localStorage.getItem('activePositionTab');
-            if (activeTab) {
-                $('#positionTabs a[href="' + activeTab + '"]').tab('show');
-            }
-
-            // Initialize tooltips
-            $('[data-toggle="tooltip"]').tooltip();
-
-            // Code dots hover effect
-            $(document).on('mouseenter', '.code-dot', function() {
-                $(this).css('transform', 'scale(1.3)');
-            }).on('mouseleave', '.code-dot', function() {
-                $(this).css('transform', 'scale(1)');
-            });
-
-            // Export to CSV function
-            window.exportTableToCSV = function() {
-                var data = [];
-                var headers = ['ID', 'عنوان بست', 'بست مافوق', 'کدها', 'درجه', 'تعداد', 'پر شده', 'موقعیت', 'وضعیت'];
-
-                $('#positionsTable tbody tr').each(function() {
-                    var row = [];
-                    $(this).find('td').each(function(index) {
-                        if (index !== 7) { // Skip actions column
-                            var text = $(this).text().trim();
-                            text = text.replace(/\s+/g, ' ').replace(/\n/g, ' ');
-                            row.push(text);
+            // Defer loading of organization chart tab
+            $('#organ-tab').on('shown.bs.tab', function() {
+                // Load org chart content via AJAX if not loaded
+                if ($('#organ .tree-container').children().length === 0) {
+                    $.ajax({
+                        url: '{{ route("admin.office.positions.org-chart") }}',
+                        method: 'GET',
+                        success: function(data) {
+                            $('#organ .tree-container').html(data);
+                        },
+                        error: function() {
+                            $('#organ .tree-container').html('<div class="alert alert-danger">خطا در بارگذاری چارت سازمانی</div>');
                         }
                     });
-                    data.push(row);
-                });
-
-                // Create CSV content
-                var csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-                csvContent += headers.join(",") + "\n";
-                data.forEach(function(rowArray) {
-                    var row = rowArray.map(cell => `"${cell}"`).join(",");
-                    csvContent += row + "\n";
-                });
-
-                // Add summary
-                csvContent += "\n";
-                csvContent += `"تاریخ خروجی","${new Date().toLocaleDateString('fa-IR')}"\n`;
-                csvContent += `"تعداد رکورد","${data.length}"\n`;
-
-                // Create download link
-                var encodedUri = encodeURI(csvContent);
-                var link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", `positions_${new Date().getTime()}.csv`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-
-            // Keyboard shortcuts
-            $(document).keydown(function(e) {
-                // Ctrl + F for search focus
-                if (e.ctrlKey && e.keyCode === 70) {
-                    e.preventDefault();
-                    $('input[name="search"]').focus();
-                }
-                // Esc to clear search
-                if (e.keyCode === 27) {
-                    $('input[name="search"]').val('');
-                    if ($('input[name="search"]').is(':focus')) {
-                        $('#filterForm').submit();
-                    }
                 }
             });
 
-            // Auto-submit search after 1 second of inactivity
-            var searchTimeout;
+            // Simple filter button activation
+            $('.filter-status, .filter-level').on('click', function() {
+                const $this = $(this);
+                const inputName = $this.hasClass('filter-status') ? 'status' : 'level';
+                const inputValue = $this.data(inputName);
+
+                $('#' + inputName + 'Input').val(inputValue);
+                $('#filterForm').submit();
+            });
+
+            // Optimize search input
+            var searchTimer;
             $('input[name="search"]').on('keyup', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(function() {
                     $('#filterForm').submit();
-                }, 1000);
+                }, 800); // Increased from 1000 to 800ms
             });
+
+            // Lazy load tooltips for code dots
+            $(document).on('mouseenter', '.code-dot', function() {
+                const $this = $(this);
+                if (!$this.data('title-initialized')) {
+                    const title = $this.attr('title');
+                    $this.tooltip({
+                        title: title,
+                        placement: 'top'
+                    });
+                    $this.data('title-initialized', true);
+                }
+            });
+
+            // Simple hover effects without complex calculations
+            $('.stats-card, .position-card').hover(
+                function() {
+                    $(this).css('transform', 'translateY(-3px)');
+                },
+                function() {
+                    $(this).css('transform', 'translateY(0)');
+                }
+            );
         });
+
+        // Optimize export function
+        window.exportTableToCSV = function() {
+            // Show loading indicator
+            const $button = $('.btn-outline-success:contains("خروجی CSV")');
+            const originalText = $button.html();
+            $button.html('<i class="fas fa-spinner fa-spin mr-1"></i>در حال تولید...');
+            $button.prop('disabled', true);
+
+            setTimeout(function() {
+                // Simple export implementation
+                const table = $('#positionsTable').DataTable();
+                table.button('.buttons-excel').trigger();
+
+                // Restore button
+                setTimeout(function() {
+                    $button.html(originalText);
+                    $button.prop('disabled', false);
+                }, 1000);
+            }, 500);
+        }
     </script>
 @endsection
