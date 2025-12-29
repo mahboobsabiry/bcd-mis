@@ -312,25 +312,6 @@
                         </div>
                     </div>
 
-                    <!-- Status Filters -->
-                    <div class="col-md-4 mb-3">
-                        <div class="filter-btn-group">
-                            <span class="mr-2 text-muted small">وضعیت:</span>
-                            <button type="button" class="btn filter-status {{ !request('status') ? 'btn-primary' : 'btn-outline-secondary' }}" data-status="">
-                                همه
-                            </button>
-                            <button type="button" class="btn filter-status {{ request('status') == 'full' ? 'btn-primary' : 'btn-outline-success' }}" data-status="full">
-                                پر
-                            </button>
-                            <button type="button" class="btn filter-status {{ request('status') == 'vacant' ? 'btn-primary' : 'btn-outline-warning' }}" data-status="vacant">
-                                خالی
-                            </button>
-                            <button type="button" class="btn filter-status {{ request('status') == 'uncoded' ? 'btn-primary' : 'btn-outline-info' }}" data-status="uncoded">
-                                بدون کد
-                            </button>
-                        </div>
-                    </div>
-
                     <!-- Level Filters -->
                     <div class="col-md-3 mb-3">
                         <div class="filter-btn-group">
@@ -358,33 +339,25 @@
                 </div>
 
                 <!-- Hidden fields for filter submission -->
-                <input type="hidden" name="status" id="statusInput" value="{{ request('status') }}">
                 <input type="hidden" name="level" id="levelInput" value="{{ request('level') }}">
                 <input type="hidden" name="per_page" id="perPageInput" value="{{ request('per_page', 25) }}">
             </form>
         </div>
 
         <!-- Clear Filters Button -->
-        @if(request()->hasAny(['search', 'status', 'level']))
+        @if(request()->hasAny(['search', 'level']))
             <div class="mb-3 text-center">
                 <a href="{{ route('admin.office.positions.index') }}" class="btn btn-outline-danger btn-sm">
                     <i class="fas fa-times-circle mr-1"></i> حذف فیلترها
                 </a>
                 <span class="text-muted small mr-3">فیلترهای فعال:
-                @if(request('search'))
+                    @if(request('search'))
                         <span class="badge badge-info">{{ request('search') }}</span>
-                    @endif
-                    @if(request('status') == 'full')
-                        <span class="badge badge-success">پر</span>
-                    @elseif(request('status') == 'vacant')
-                        <span class="badge badge-warning">خالی</span>
-                    @elseif(request('status') == 'uncoded')
-                        <span class="badge badge-info">بدون کد</span>
                     @endif
                     @if(request('level'))
                         <span class="badge badge-primary">درجه {{ request('level') }}</span>
                     @endif
-            </span>
+                </span>
             </div>
         @endif
 
@@ -642,9 +615,9 @@
             });
 
             // Simple filter button activation
-            $('.filter-status, .filter-level').on('click', function() {
+            $('.filter-level').on('click', function() {
                 const $this = $(this);
-                const inputName = $this.hasClass('filter-status') ? 'status' : 'level';
+                const inputName = $this.hasClass('filter-level') ? 'level' : '';
                 const inputValue = $this.data(inputName);
 
                 $('#' + inputName + 'Input').val(inputValue);

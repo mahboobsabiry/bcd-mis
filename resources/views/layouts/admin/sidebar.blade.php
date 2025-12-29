@@ -283,7 +283,7 @@
                 @can('office_position_view')
                     <li class="nav-item {{ request()->is('admin/office/positions') ||
                     request()->is('admin/office/positions/*') ||
-                    request()->is('admin/office/appointment-positions') ||
+                    request()->is('admin/office/appointed-positions') ||
                     request()->is('admin/office/empty-positions') ||
                     request()->is('admin/office/inactive-positions') ? 'active show' : '' }}">
 
@@ -304,9 +304,9 @@
                                 </a>
                             </li>
 
-                            <!-- Appointment Positions -->
-                            <li class="nav-sub-item {{ request()->is('admin/office/appointment-positions') ? 'active' : '' }}">
-                                <a class="nav-sub-link" href="{{ route('admin.office.positions.appointment') }}">
+                            <!-- Appointed Positions -->
+                            <li class="nav-sub-item {{ request()->is('admin/office/appointed-positions') ? 'active' : '' }}">
+                                <a class="nav-sub-link" href="{{ route('admin.office.positions.appointed') }}">
                                     @lang('pages.positions.appointmentPositions')
                                     ({{ \App\Models\Office\PositionCode::whereHas('employee')->get()->count() }})
                                 </a>

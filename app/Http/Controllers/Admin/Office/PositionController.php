@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Office\Position;
 use App\Models\Office\PositionCode;
 use App\Models\Place;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -88,33 +89,6 @@ class PositionController extends Controller
             }
         }
 
-        // Apply status filter - use database queries as much as possible
-        if ($request->has('status')) {
-            $status = $request->status;
-            $query->withCount([
-                'codes',
-                'codes as filled_codes_count' => function($q) {
-                    $q->whereHas('employee');
-                }
-            ]);
-
-            if ($status == 'full') {
-                // Using havingRaw for calculated columns
-                $query->havingRaw('filled_codes_count >= num_of_pos');
-
-            } elseif ($status == 'vacant') {
-                // Has codes but not all are filled
-                $query->where(function($q) {
-                    $q->whereRaw('filled_codes_count < num_of_pos')
-                        ->orWhereRaw('codes_count = 0');
-                });
-
-            } elseif ($status == 'uncoded') {
-                // No codes at all
-                $query->havingRaw('codes_count = 0');
-            }
-        }
-
         // Order by position_number to see hierarchy
         $positions = $query->orderBy('position_number', 'asc')
             ->orderBy('created_at', 'asc')
@@ -136,10 +110,10 @@ class PositionController extends Controller
     {
         return Cache::remember('positions_stats', 300, function () { // Cache for 5 minutes
             return [
-                'total_positions' => \App\Models\Office\PositionCode::count(),
-                'filled_positions' => \App\Models\Office\PositionCode::whereHas('employee')->count(),
-                'empty_positions' => \App\Models\Office\PositionCode::whereDoesntHave('employee')->count(),
-                'uncoded_positions' => \App\Models\Office\Position::doesntHave('codes')->count(),
+                'total_positions' => PositionCode::count(),
+                'filled_positions' => PositionCode::whereHas('employee')->count(),
+                'empty_positions' => PositionCode::whereDoesntHave('employee')->count(),
+                'uncoded_positions' => Position::doesntHave('codes')->count(),
             ];
         });
     }
@@ -521,7 +495,7 @@ class PositionController extends Controller
 
         if (!empty($changedFields)) {
             // Notify relevant users (HR, managers, etc.)
-            $usersToNotify = \App\Models\User::whereHas('roles', function($query) {
+            $usersToNotify = User::whereHas('roles', function($query) {
                 $query->whereIn('name', ['hr_manager', 'office_manager']);
             })->get();
 
@@ -541,71 +515,6 @@ class PositionController extends Controller
                 }
             }
         }
-    }
-
-    /**
-     * Additional method for handling position code management
-     */
-    public function manageCodes(Position $position)
-    {
-        // This method would handle the position codes management
-        // Called from the "Manage Codes" button in the edit page
-
-        $codes = $position->codes()->with('employee')->orderBy('code')->get();
-
-        return view('admin.office.positions.manage-codes', compact('position', 'codes'));
-    }
-
-    /**
-     * Generate suggested codes for a position
-     */
-    public function generateCodes(Position $position)
-    {
-        // Generate suggested codes based on position title and place
-        $title = $position->title;
-        $place = $position->place;
-
-        $placeCode = $place ? substr($place->name, 0, 2) : 'PO';
-        $titleCode = substr($title, 0, 2);
-
-        $existingCodes = $position->codes->pluck('code')->toArray();
-        $suggestions = [];
-
-        // Generate unique suggestions
-        for ($i = 1; $i <= 10; $i++) {
-            $code = strtoupper($placeCode . $titleCode . str_pad($i, 3, '0', STR_PAD_LEFT));
-            if (!in_array($code, $existingCodes)) {
-                $suggestions[] = $code;
-            }
-            if (count($suggestions) >= 5) break;
-        }
-
-        return response()->json([
-            'success' => true,
-            'suggestions' => $suggestions,
-            'position_id' => $position->id
-        ]);
-    }
-
-    /**
-     * Validate position before update (AJAX validation)
-     */
-    public function validatePosition(Request $request, Position $position = null)
-    {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|min:3|max:255|unique:positions,title' . ($position ? ',' . $position->id : ''),
-            'position_number' => 'required|integer|min:1|max:10',
-            'parent_id' => 'nullable|exists:positions,id'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ]);
-        }
-
-        return response()->json(['success' => true]);
     }
 
     /**
@@ -673,20 +582,11 @@ class PositionController extends Controller
         }
     }
 
-    // Appointment Positions
-    public function appointment()
+    // Appointed Positions
+    public function appointed()
     {
-        // Send appointment and empty positions count to dashboard
-        // Sum number of positions
-        // $sum_appointment = Position::all()->sum('num_of_pos');
-        // Count all employees
-        // $employees_count = Employee::all()->count();
-        // Count all empty positions
-        // $empty_positions = $sum_appointment - $employees_count;
-        // Count all appointment positions
-        // $appointment_positions = $sum_appointment - $empty_positions;
         $codes = PositionCode::whereHas('employee')->get();
-        return view('admin.office.positions.appointment', compact('codes'));
+        return view('admin.office.positions.appointed', compact('codes'));
     }
 
     // Empty Positions

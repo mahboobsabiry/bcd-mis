@@ -144,11 +144,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
             Route::get('export/excel', [PositionController::class, 'exportExcel'])->name('export.excel');
             Route::get('export/csv', [PositionController::class, 'exportCSV'])->name('export.csv');
         });
-        Route::get('/admin/office/positions/org-chart', [PositionController::class, 'getOrgChart'])
+        Route::get('positions-org-chart', [PositionController::class, 'getOrgChart'])
             ->name('positions.org-chart');
 
         Route::post('update-position-status', [PositionController::class, 'updatePositionStatus'])->name('updatePositionStatus');
-        Route::get('appointment-positions', [PositionController::class, 'appointment'])->name('positions.appointment');
+        Route::get('appointed-positions', [PositionController::class, 'appointed'])->name('positions.appointed');
+
         Route::get('empty-positions', [PositionController::class, 'empty'])->name('positions.empty');
         Route::get('inactive-positions', [PositionController::class, 'inactive'])->name('positions.inactive');
         // Position codes routes
