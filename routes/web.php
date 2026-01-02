@@ -167,7 +167,28 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
         Route::post('position/{id}/edit-code', [PositionController::class, 'edit_code'])->name('positions.edit_code');
 
         // Hostel
-        Route::resource('hostel', HostelController::class);
+        // Route::resource('hostel', HostelController::class);
+        // Hostel Routes
+        Route::prefix('hostels')->name('hostel.')->group(function () {
+            Route::get('/', [HostelController::class, 'index'])->name('index');
+            Route::get('/create', [HostelController::class, 'create'])->name('create');
+            Route::post('/', [HostelController::class, 'store'])->name('store');
+            Route::get('/{hostel}', [HostelController::class, 'show'])->name('show');
+            Route::get('/{hostel}/edit', [HostelController::class, 'edit'])->name('edit');
+            Route::put('/{hostel}', [HostelController::class, 'update'])->name('update');
+            Route::delete('/{hostel}', [HostelController::class, 'destroy'])->name('destroy');
+
+            // Additional routes
+            Route::post('/bulk-assign', [HostelController::class, 'bulkAssign'])->name('bulk-assign');
+            Route::get('/by-place/{place}', [HostelController::class, 'getByPlace'])->name('get-by-place');
+
+            // Add more routes as needed
+            Route::post('/{hostel}/status', [HostelController::class, 'updateStatus'])->name('update-status');
+            Route::get('/export', [HostelController::class, 'export'])->name('export');
+        });
+
+        // If you have an employee search route
+        Route::get('/employees/search-available', [EmployeeController::class, 'searchAvailable'])->name('employees.search-available');
 
         // Employees =====================================================================|
         // ========== EmployeeController ==========

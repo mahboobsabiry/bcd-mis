@@ -113,7 +113,6 @@ return [
         'administrationsTitleNote' => 'Balkh Custom Department Administrations List',
         'adminOrg'          => 'Administration Organization',
         'appointed'         => 'Appointed',
-        'appointmentPositions' => 'Appointment Positions',
         'allPositions'      => 'All Positions',
         'afCustomsDep'      => 'Afghan Customs Department',
         'bcdOrg'            => 'Balkh Custom Department Organization',
@@ -141,7 +140,14 @@ return [
         'positions'         => 'Positions',
         'num_of_empty_pos'  => 'Number of Empty Positions',
         'responsible'       => 'Responsible',
-        'underHand'         => 'Under Hand'
+        'underHand'         => 'Under Hand',
+
+        // New
+        'appointmentPositions'  => 'Appointment Positions',
+        'totalAppointed'        => 'Total Appointed',
+        'uniquePositions'       => 'Unique Positions',
+        'noAppointedPositions'  => 'No Appointed Positions',
+        'noAppointedPositionsDesc' => 'No appointed positions, you can add new position.'
     ],
 
     'profile' => [

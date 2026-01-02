@@ -582,25 +582,29 @@ class PositionController extends Controller
         }
     }
 
-    // Appointed Positions
+    // PositionController.php - Updated appointed() method
     public function appointed()
     {
-        $codes = PositionCode::whereHas('employee')->get();
+        // Eager load relationships for better performance
+        $codes = PositionCode::with(['employee', 'position.parent'])
+            ->whereHas('employee')
+            ->where('status', 1) // Only active position codes
+            ->orderBy('code')
+            ->get();
+
         return view('admin.office.positions.appointed', compact('codes'));
     }
 
-    // Empty Positions
+    // PositionController.php - Updated empty() method
     public function empty()
     {
-        // Send appointment and empty positions count to dashboard
-        // Sum number of positions
-        // $sum_appointment = Position::all()->sum('num_of_pos');
-        // Count all employees
-        // $employees_count = Employee::all()->count();
-        // Count all empty positions
-        // $empty_positions = $sum_appointment - $employees_count;
-        // $positions = Position::with('employees')->orderBy('created_at', 'desc')->get();
-        $codes = PositionCode::whereDoesntHave('employee')->get();
+        // Get empty position codes with active status
+        $codes = PositionCode::with(['position.parent', 'position.place'])
+            ->whereDoesntHave('employee')
+            ->where('status', 1) // Only active empty positions
+            ->orderBy('code')
+            ->get();
+
         return view('admin.office.positions.empty', compact('codes'));
     }
 

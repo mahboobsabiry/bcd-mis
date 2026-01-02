@@ -349,4 +349,49 @@ class EmployeeController extends Controller
         $employee = Employee::find($id);
         return view('admin.office.employees.custom_card', compact('employee'));
     }
+
+    // Search Available
+    public function searchAvailable(Request $request)
+    {
+        $term = $request->get('q', '');
+        $hostelId = $request->get('hostel_id');
+
+        // Get employees without hostel or in the specified hostel
+        $query = Employee::query()
+            ->select('id', 'name', 'last_name', 'position_id', 'photo_id')
+            ->where(function($q) use ($term) {
+                $q->where('name', 'like', "%{$term}%")
+                    ->orWhere('last_name', 'like', "%{$term}%")
+                    ->orWhere('emp_number', 'like', "%{$term}%");
+            });
+
+        // If hostel_id is provided, also include employees in that hostel
+        if ($hostelId) {
+            $query->where(function($q) use ($hostelId) {
+                $q->whereNull('hostel_id')
+                    ->orWhere('hostel_id', $hostelId);
+            });
+        } else {
+            $query->whereNull('hostel_id');
+        }
+
+        $employees = $query->with(['position', 'photo'])
+            ->limit(20)
+            ->get()
+            ->map(function($employee) {
+                return [
+                    'id' => $employee->id,
+                    'name' => $employee->name,
+                    'last_name' => $employee->last_name,
+                    'position' => $employee->position->title ?? '',
+                    'photo' => $employee->photo->path ?? null,
+                    'text' => $employee->name . ' ' . $employee->last_name .
+                        ' (' . ($employee->position->title ?? '') . ')'
+                ];
+            });
+
+        return response()->json([
+            'results' => $employees
+        ]);
+    }
 }

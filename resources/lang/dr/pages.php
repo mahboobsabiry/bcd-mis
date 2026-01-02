@@ -114,7 +114,6 @@ return [
         'administrationsTitleNote' => 'لیست تشکیلات آمریت های ریاست گمرک بلخ',
         'adminOrg'          => 'تشکیلات آمریت',
         'appointed'         => 'تعیین بست',
-        'appointmentPositions' => 'بست های تعیین شده',
         'allPositions'      => 'همه بست ها',
         'afCustomsDep'      => 'ریاست عمومی گمرکات',
         'bcdOrg'            => 'تشکیلات ریاست گمرک بلخ',
@@ -142,7 +141,14 @@ return [
         'positions'         => 'بست ها',
         'num_of_empty_pos'  => 'تعداد بست خالی',
         'responsible'       => 'مسئول',
-        'underHand'         => 'زیردستِ'
+        'underHand'         => 'زیردستِ',
+
+        // New
+        'appointmentPositions'  => 'بست‌های تعیین شده',
+        'totalAppointed'        => 'کل بست‌های تعیین شده',
+        'uniquePositions'       => 'بست‌های منحصر به فرد',
+        'noAppointedPositions'  => 'بست تعیین شده موجود نیست',
+        'noAppointedPositionsDesc' => 'هیچ بستی تاکنون تعیین نشده است. می‌توانید یک بست جدید ایجاد کنید.'
     ],
 
     'profile' => [

@@ -62,6 +62,7 @@ return [
         'organization'      => 'Organization',
         'pages'             => 'Pages',
         'permissions'       => 'Permissions',
+        'places'            => 'Places',
         'positions'         => 'Positions',
         'posts'             => 'Posts',
         'provinces'         => 'Provinces',

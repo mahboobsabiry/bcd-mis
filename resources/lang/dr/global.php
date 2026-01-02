@@ -69,6 +69,7 @@ return [
     'next'      => 'بعدی',
     'no'        => 'نخیر',
     'notFound'  => 'یافت نشد',
+    'noInfo'    => 'فاقد معلومات',
     'number'    => 'شماره',
     'offline'   => 'آفلاین',
     'oh'		=> 'اوه',
@@ -120,5 +121,20 @@ return [
     'hour'		    => 'ساعت',
     'organization'	=> 'تشکیلات',
     'general_info'  => 'معلومات عمومی',
-    'other_info'    => 'معلومات دیگر'
+    'other_info'    => 'معلومات دیگر',
+
+    // New
+    'capacityError' => 'خطای ظرفیت',
+    'capacityErrorMessage' => 'ظرفیت جدید کمتر از تعداد اعضای فعلی است. آیا می‌خواهید ادامه دهید؟',
+    'currentOccupants' => 'اعضای فعلی',
+    'newCapacity' => 'ظرفیت جدید',
+    'affectedEmployees' => 'کارمندان تأثیرپذیر',
+    'continueAnyway' => 'ادامه دادن',
+    'overCapacity' => 'بیش از ظرفیت',
+    'full' => 'پر',
+    'partial' => 'نیمه پر',
+    'overCapacityWarning' => 'این ظرفیت بیش از ظرفیت جدید است',
+    'capacityFor' => 'ظرفیت برای',
+    'persons' => 'نفر',
+    'capacityVisualization' => 'نمایش ظرفیت',
 ];

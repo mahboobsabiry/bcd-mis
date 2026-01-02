@@ -61,6 +61,7 @@ return [
         'organization'      => 'تشکیلات',
         'pages'             => 'صفحات',
         'permissions'       => 'مجوز ها',
+        'places'            => 'مکان‌ها',
         'positions'         => 'بست ها',
         'posts'             => 'پست‌ها',
         'provinces'         => 'ولایات',
